@@ -72,7 +72,7 @@ def tick():
     return True
 
 def publish_next():
-    if os.environ.get('SHORTS_AUTO_PUBLISH')!='1':return False
+    if os.environ.get('SHORTS_AUTO_PUBLISH')!='1' or os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')!='1':return False
     import youtube
     from renderer import sha
     with database() as c:
