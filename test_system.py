@@ -43,7 +43,7 @@ class SystemTests(unittest.TestCase):
  def test_no_public_endpoint_or_unapproved_upload(self):
   jid,_=engine.enqueue_next()
   self.assertEqual(self.client.post(f'/api/jobs/{jid}/upload-private',json={},headers=self.auth).status_code,409)
-  self.assertEqual(self.client.post(f'/api/jobs/{jid}/publish',json={},headers=self.auth).status_code,404)
+  self.assertEqual(self.client.post(f'/api/jobs/{jid}/publish',json={'sha256':'a'*64,'made_for_kids':False},headers=self.auth).status_code,409)
   self.assertEqual(self.client.get(f'/api/jobs/{jid}/assets/google-token.json',headers=self.auth).status_code,404)
  def test_daily_idempotency(self):
   store.set_setting('daily_enabled',True)
@@ -65,6 +65,12 @@ class SystemTests(unittest.TestCase):
   jid,_=engine.enqueue_next()
   with store.database() as c:c.execute("UPDATE jobs SET status='rendering',attempts=3")
   engine.recover();self.assertEqual(app.get_job(jid)['status'],'failed')
+ def test_public_upload_rejects_existing_prototype(self):
+  jid,_=engine.enqueue_next()
+  with patch.dict(os.environ,{'SHORTS_PUBLIC_PUBLISHING_ENABLED':'1'}):
+   r=self.client.post(f'/api/jobs/{jid}/publish',json={'sha256':'a'*64,'made_for_kids':False},headers=self.auth)
+  self.assertEqual(r.status_code,409)
+  self.assertIn('Prototype excluded',r.json()['detail'])
  def test_legacy_draft_preserved(self):
   r=self.client.post('/api/drafts',headers=self.auth,json={'title':'Legacy draft','script':'A draft remains available without overwriting earlier content.'})
   self.assertEqual(r.status_code,201);self.assertEqual(len(self.client.get('/api/drafts',headers=self.auth).json()),1)

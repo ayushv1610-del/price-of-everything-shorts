@@ -160,3 +160,45 @@ def callback(state:str='',code:str='',error:str=''):
     try:youtube.callback(state,code)
     except Exception:raise HTTPException(400,'Authorization failed or expired; restart connection')
     return RedirectResponse('/',status_code=303)
+
+class PublicUpload(BaseModel):
+    sha256:str=Field(pattern='^[a-f0-9]{64}$')
+    made_for_kids:bool
+
+@app.post('/api/jobs/{jid}/publish',dependencies=[Depends(require_admin)])
+def publish(jid:str,body:PublicUpload):
+    import youtube
+    if os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')!='1':
+        raise HTTPException(409,'Public publishing switch is disabled')
+    row=get_job(jid)
+    if row['youtube_id']:
+        return {'youtube_id':row['youtube_id'],'status':row['status']}
+    plan=json.loads(row['plan'])
+    # Render QA alone does not establish editorial quality. Existing demos are excluded.
+    if not plan.get('publication_ready') or plan.get('topic') in {
+        'inflation','compounding','basket','hotel-comparison-pilot','cartoon-icecream'}:
+        raise HTTPException(409,'Prototype excluded from public publishing')
+    if row['status']!='ready' or not row['qa']:
+        raise HTTPException(409,'Completed media validation required')
+    if sha(ROOT/jid/'video.mp4')!=body.sha256:
+        raise HTTPException(409,'Asset hash mismatch')
+    if not (ROOT/'google-token.json').exists():
+        raise HTTPException(409,'Google authorization required')
+    with database() as c:
+        cur=c.execute("UPDATE jobs SET status='uploading',approved_hash=?,updated=? WHERE id=? AND status='ready'",
+                      (body.sha256,time.time(),jid))
+        if cur.rowcount!=1:raise HTTPException(409,'Upload already claimed')
+        event(c,jid,'public_upload_authorized',json.dumps({'sha256':body.sha256,'made_for_kids':body.made_for_kids}))
+    try:
+        result=youtube.upload_public(ROOT/jid,body.made_for_kids)
+        state='published' if result['verified_public'] else 'uploaded_not_public'
+        with database() as c:
+            c.execute('UPDATE jobs SET status=?,youtube_id=?,updated=? WHERE id=?',
+                      (state,result['youtube_id'],time.time(),jid))
+            event(c,jid,state,result['youtube_id'])
+        return dict(result,status=state)
+    except Exception:
+        with database() as c:
+            c.execute("UPDATE jobs SET status='upload_unknown',error='Reconcile remote upload before retry',updated=? WHERE id=?",(time.time(),jid))
+            event(c,jid,'public_upload_unknown')
+        raise HTTPException(502,'Upload outcome unknown; duplicate retry blocked')

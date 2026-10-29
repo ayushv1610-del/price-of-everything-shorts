@@ -63,3 +63,25 @@ def upload_private(job,folder):
     while response is None:_,response=request.next_chunk(num_retries=0)
     if not response.get('id'):raise ValueError('YouTube did not return a video ID')
     return response['id']
+
+def upload_public(folder, made_for_kids):
+    """Explicit public upload; caller owns transactional claim and ambiguity handling."""
+    from googleapiclient.http import MediaFileUpload
+    expected=os.environ.get('YOUTUBE_CHANNEL_ID')
+    if not expected or channel()['id']!=expected:
+        raise ValueError('Confirmed YouTube channel required')
+    metadata=json.loads((folder/'metadata.json').read_text())
+    request=client().videos().insert(part='snippet,status',notifySubscribers=False,
+        body={'snippet':{'title':metadata['title'],'description':metadata['description'],
+                        'tags':metadata['tags'],'categoryId':'24'},
+              'status':{'privacyStatus':'public','selfDeclaredMadeForKids':made_for_kids}},
+        media_body=MediaFileUpload(str(folder/'video.mp4'),mimetype='video/mp4',
+                                  chunksize=4*1024*1024,resumable=True))
+    result=None
+    while result is None:
+        _,result=request.next_chunk(num_retries=0)
+    if not result.get('id'):raise ValueError('Missing YouTube video ID')
+    actual=client().videos().list(part='status',id=result['id']).execute()
+    items=actual.get('items',[])
+    public=bool(items and items[0]['status'].get('privacyStatus')=='public')
+    return {'youtube_id':result['id'],'verified_public':public}
