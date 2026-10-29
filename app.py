@@ -14,8 +14,9 @@ TOKEN=os.environ.get('SHORTS_ADMIN_TOKEN','')
 async def lifespan(app):
     engine.STOP.clear()
     thread=None
+    app.state.worker=None
     if os.environ.get('SHORTS_WORKER_ENABLED','1')=='1':
-        thread=threading.Thread(target=engine.worker,daemon=True);thread.start()
+        thread=threading.Thread(target=engine.worker,daemon=True);app.state.worker=thread;thread.start()
     yield
     engine.STOP.set()
     if thread:thread.join(timeout=5)
@@ -48,6 +49,10 @@ def ready():
         ROOT.mkdir(parents=True,exist_ok=True)
         free=shutil.disk_usage(ROOT).free
         if free<50*1024**2:raise RuntimeError('Low disk')
+        if not shutil.which('ffmpeg'):raise RuntimeError('ffmpeg unavailable')
+        if os.environ.get('SHORTS_WORKER_ENABLED','1')=='1':
+            thread=getattr(app.state,'worker',None)
+            if thread is None or not thread.is_alive():raise RuntimeError('Worker not running')
         return {'status':'ready','worker':os.environ.get('SHORTS_WORKER_ENABLED','1')=='1','ffmpeg':bool(shutil.which('ffmpeg'))}
     except Exception:raise HTTPException(503,'Storage unavailable or full')
 @app.get('/',response_class=HTMLResponse)

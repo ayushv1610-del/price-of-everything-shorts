@@ -1,0 +1,23 @@
+name: Shorts production checks
+on: [push, pull_request]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core
+      - run: python -m pip install -r requirements.txt
+      - run: python -m unittest -v test_production test_system
+      - name: Real narrated media test
+        run: |
+          python - <<'PY'
+          from catalog import CATALOG, plan_for
+          from renderer import render
+          result = render(plan_for(CATALOG[0]), '/tmp/shorts-ci')
+          assert result['full_decode'] and result['audio']
+          assert 12 <= result['duration'] <= 60
+          print(result)
+          PY
