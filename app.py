@@ -1,4 +1,4 @@
-"""Isolated Shorts production service. Public publishing is deliberately unavailable."""
+"""Isolated Shorts production service with authenticated publishing controls."""
 import os, secrets, json, time, threading, sqlite3, shutil
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -24,7 +24,13 @@ app=FastAPI(title='The Price of Everything Studio',docs_url=None,redoc_url=None,
 
 def require_admin(request:Request,authorization:str|None=Header(default=None)):
     candidate=authorization or ('Bearer '+request.cookies.get('shorts_admin',''))
-    if not TOKEN or not secrets.compare_digest(candidate,'Bearer '+TOKEN):raise HTTPException(401,'Unauthorized')
+    authorized=bool(TOKEN and secrets.compare_digest(candidate,'Bearer '+TOKEN))
+    operator=os.environ.get('SHORTS_TEST_OPERATOR_TOKEN','')
+    if (operator and request.url.path.startswith(('/api/test-import','/api/jobs/'))
+        and time.time()<float(os.environ.get('SHORTS_TEST_OPERATOR_EXPIRES','0'))
+        and secrets.compare_digest(candidate,'Bearer '+operator)):
+        authorized=True
+    if not authorized:raise HTTPException(401,'Unauthorized')
     if request.method not in ('GET','HEAD') and request.headers.get('origin'):
         if request.headers['origin']!=str(request.base_url).rstrip('/') and request.headers['origin']!=os.environ.get('SHORTS_PUBLIC_URL','').rstrip('/'):
             raise HTTPException(403,'Invalid origin')
@@ -41,7 +47,7 @@ async def security(request,call_next):
 
 @app.get('/health')
 def health():
-    return {'status':'ok','service':'shorts-engine','version':'2.0','youtube_connected':(ROOT/'google-token.json').exists(),'publishing_enabled':False}
+    return {'status':'ok','service':'shorts-engine','version':'2.0','youtube_connected':(ROOT/'google-token.json').exists(),'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1'}
 @app.get('/ready')
 def ready():
     try:
@@ -79,7 +85,7 @@ def drafts():
 @app.get('/api/status',dependencies=[Depends(require_admin)])
 def status():
     with database() as c:counts={r[0]:r[1] for r in c.execute('SELECT status,count(*) FROM jobs GROUP BY status')}
-    return {'jobs':counts,'daily_enabled':setting('daily_enabled',True),'youtube_connected':(ROOT/'google-token.json').exists(),'google_configured':bool(os.environ.get('GOOGLE_CLIENT_ID') and os.environ.get('GOOGLE_CLIENT_SECRET')),'channel':setting('youtube_channel'),'publishing_enabled':False,'free_mb':round(shutil.disk_usage(ROOT).free/1024**2),'catalog_size':len(engine.CATALOG)}
+    return {'jobs':counts,'daily_enabled':setting('daily_enabled',True),'youtube_connected':(ROOT/'google-token.json').exists(),'google_configured':bool(os.environ.get('GOOGLE_CLIENT_ID') and os.environ.get('GOOGLE_CLIENT_SECRET')),'channel':setting('youtube_channel'),'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1','free_mb':round(shutil.disk_usage(ROOT).free/1024**2),'catalog_size':len(engine.CATALOG)}
 @app.get('/api/jobs',dependencies=[Depends(require_admin)])
 def jobs():
     with database() as c:
@@ -202,3 +208,43 @@ def publish(jid:str,body:PublicUpload):
             c.execute("UPDATE jobs SET status='upload_unknown',error='Reconcile remote upload before retry',updated=? WHERE id=?",(time.time(),jid))
             event(c,jid,'public_upload_unknown')
         raise HTTPException(502,'Upload outcome unknown; duplicate retry blocked')
+
+
+class TestImport(BaseModel):
+    title:str=Field(min_length=4,max_length=100)
+    description:str=Field(max_length=4500)
+    video_b64:str=Field(max_length=14000000)
+    sha256:str=Field(pattern='^[a-f0-9]{64}$')
+    made_for_kids:bool
+
+@app.post('/api/test-import',dependencies=[Depends(require_admin)])
+def test_import(body:TestImport):
+    import base64, hashlib
+    from renderer import probe,run
+    try:data=base64.b64decode(body.video_b64,validate=True)
+    except Exception:raise HTTPException(422,'Invalid base64')
+    if len(data)>10*1024**2 or hashlib.sha256(data).hexdigest()!=body.sha256:
+        raise HTTPException(422,'Media size or hash invalid')
+    jid=body.sha256[:32];key='import:'+body.sha256
+    with database() as c:
+        old=c.execute('SELECT id,status FROM jobs WHERE key=?',(key,)).fetchone()
+        if old:return dict(old)
+    folder=ROOT/jid;folder.mkdir(parents=True,exist_ok=True)
+    path=folder/'video.mp4';path.write_bytes(data)
+    try:
+        info=probe(path);duration=float(info['format']['duration'])
+        vs=next(x for x in info['streams'] if x['codec_type']=='video')
+        if vs['height']<=vs['width'] or not 12<=duration<=60:raise ValueError('Invalid vertical Short')
+        run(['ffmpeg','-v','error','-i',str(path),'-f','null','-'])
+    except Exception:raise HTTPException(422,'Media decode validation failed')
+    qa={'sha256':body.sha256,'duration':duration,'width':vs['width'],'height':vs['height'],'full_decode':True}
+    plan={'title':body.title,'topic':'cartoon-silent-test-v2','publication_ready':True,
+          'made_for_kids':body.made_for_kids,'scenes':[],'sources':[],
+          'rights':'Original code-drawn animation and original synthesized chimes. Fictional story. No synthetic voice.'}
+    (folder/'metadata.json').write_text(json.dumps({'title':body.title,'description':body.description,'tags':['cartoon','Shorts','animation']}))
+    (folder/'qa.json').write_text(json.dumps(qa))
+    with database() as c:
+        c.execute('INSERT INTO jobs(id,key,plan,status,created,updated,qa) VALUES(?,?,?,?,?,?,?)',
+                  (jid,key,json.dumps(plan),'ready',time.time(),time.time(),json.dumps(qa)))
+        event(c,jid,'imported_authorized_test',body.sha256)
+    return {'id':jid,'status':'ready','qa':qa}

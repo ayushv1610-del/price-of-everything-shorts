@@ -71,6 +71,17 @@ class SystemTests(unittest.TestCase):
    r=self.client.post(f'/api/jobs/{jid}/publish',json={'sha256':'a'*64,'made_for_kids':False},headers=self.auth)
   self.assertEqual(r.status_code,409)
   self.assertIn('Prototype excluded',r.json()['detail'])
+ def test_import_rejects_corrupt_media_and_unauthenticated_calls(self):
+  body={'title':'Test cartoon','description':'Original animation','sha256':'a'*64,'video_b64':'eA==','made_for_kids':True}
+  self.assertEqual(self.client.post('/api/test-import',json=body).status_code,401)
+  self.assertEqual(self.client.post('/api/test-import',headers=self.auth,json=body).status_code,422)
+ def test_operator_credential_expires_and_cannot_read_status(self):
+  import time
+  h={'Authorization':'Bearer limited-test'}
+  with patch.dict(os.environ,{'SHORTS_TEST_OPERATOR_TOKEN':'limited-test','SHORTS_TEST_OPERATOR_EXPIRES':str(time.time()+60)}):
+   self.assertEqual(self.client.get('/api/status',headers=h).status_code,401)
+  with patch.dict(os.environ,{'SHORTS_TEST_OPERATOR_TOKEN':'limited-test','SHORTS_TEST_OPERATOR_EXPIRES':'0'}):
+   self.assertEqual(self.client.post('/api/test-import',headers=h,json={}).status_code,401)
  def test_legacy_draft_preserved(self):
   r=self.client.post('/api/drafts',headers=self.auth,json={'title':'Legacy draft','script':'A draft remains available without overwriting earlier content.'})
   self.assertEqual(r.status_code,201);self.assertEqual(len(self.client.get('/api/drafts',headers=self.auth).json()),1)
