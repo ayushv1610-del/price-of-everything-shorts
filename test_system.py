@@ -101,7 +101,7 @@ class SystemTests(unittest.TestCase):
   qa={'dialogue_validated':True,'sha256':hashlib.sha256(b'validated test media').hexdigest()}
   with store.database() as c:c.execute("UPDATE jobs SET status='ready',qa=? WHERE id=?",(json.dumps(qa),jid))
   with patch.dict(os.environ,{'SHORTS_AUTO_PUBLISH':'1'}),patch.object(youtube,'upload_public',side_effect=RuntimeError('connection lost')) as upload:
-   self.assertTrue(engine.publish_next());self.assertFalse(engine.publish_next());self.assertEqual(upload.call_count,1)
+   self.assertTrue(engine.tick());self.assertFalse(engine.tick());self.assertEqual(upload.call_count,1)
   self.assertEqual(app.get_job(jid)['status'],'upload_unknown')
  def test_legacy_draft_preserved(self):
   r=self.client.post('/api/drafts',headers=self.auth,json={'title':'Legacy draft','script':'A draft remains available without overwriting earlier content.'})

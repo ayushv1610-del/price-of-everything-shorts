@@ -51,9 +51,10 @@ def tick():
     with database() as c:
         c.execute('BEGIN IMMEDIATE')
         row=c.execute("SELECT * FROM jobs WHERE status='queued' AND attempts<3 ORDER BY created LIMIT 1").fetchone()
-        if not row:return publish_next()
-        c.execute("UPDATE jobs SET status='rendering', attempts=attempts+1,updated=? WHERE id=?",(time.time(),row['id']))
-        event(c,row['id'],'render_started')
+        if row:
+            c.execute("UPDATE jobs SET status='rendering', attempts=attempts+1,updated=? WHERE id=?",(time.time(),row['id']))
+            event(c,row['id'],'render_started')
+    if row is None:return publish_next()
     folder=ROOT/row['id']
     try:
         ROOT.mkdir(parents=True,exist_ok=True)
