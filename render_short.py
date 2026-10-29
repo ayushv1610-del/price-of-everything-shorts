@@ -48,17 +48,17 @@ def render(output: str):
     if errors: raise ValueError(errors)
     output_path = Path(output).resolve()
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory() as tmp:
-        raw = Path(tmp) / "frames.rgb"
-        with raw.open("wb") as stream:
-            for idx, scene in enumerate(plan.scenes, 1):
-                frames = scene.seconds * FPS
-                for i in range(frames):
-                    stream.write(make_frame(scene.narration, idx, len(plan.scenes), i/max(frames-1,1)).tobytes())
-        subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-                        "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{WIDTH}x{HEIGHT}",
-                        "-r", str(FPS), "-i", str(raw), "-c:v", "libx264", "-preset", "veryfast",
-                        "-crf", "28", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(output_path)], check=True)
+    with subprocess.Popen(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                           "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{WIDTH}x{HEIGHT}",
+                           "-r", str(FPS), "-i", "pipe:0", "-c:v", "libx264", "-preset", "veryfast",
+                           "-crf", "28", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(output_path)], stdin=subprocess.PIPE) as proc:
+        for idx, scene in enumerate(plan.scenes, 1):
+            frames = scene.seconds * FPS
+            for i in range(frames):
+                proc.stdin.write(make_frame(scene.narration, idx, len(plan.scenes), i/max(frames-1,1)).tobytes())
+        proc.stdin.close()
+        if proc.wait() != 0:
+            raise RuntimeError("ffmpeg failed")
     return str(output_path)
 
 if __name__ == "__main__":
