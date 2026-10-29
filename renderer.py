@@ -53,7 +53,11 @@ def render(plan,folder):
         text=folder/f'speech-{i}.txt';text.write_text(s['narration'])
         wav=folder/f'voice-{i}.wav'
         # Text file avoids passing narration as filter syntax or shell input.
-        run(['ffmpeg','-v','error','-y','-f','lavfi','-i',f'flite=textfile={text}:voice=slt','-ar','48000',str(wav)])
+        if plan.get('voice_engine')=='kokoro':
+            from kokoro_voice import synthesize
+            synthesize(s['narration'],s['speaker'],wav)
+        else:
+            run(['ffmpeg','-v','error','-y','-f','lavfi','-i',f'flite=textfile={text}:voice=slt','-ar','48000',str(wav)])
         length=float(probe(wav)['format']['duration'])+.3
         count=math.ceil(max(3.,length)*FPS);duration=count/FPS
         durations.append(duration)
@@ -62,7 +66,15 @@ def render(plan,folder):
         with open(folder/'ffmpeg.log','wb') as err:
             p=subprocess.Popen(cmd,stdin=subprocess.PIPE,stderr=err)
             try:
-                for j in range(count):p.stdin.write(frame(s,i,len(plan['scenes']),j/max(1,count-1)).tobytes())
+                import wave, numpy as np
+                with wave.open(str(wav),'rb') as voice_input:
+                    audio_samples=np.frombuffer(voice_input.readframes(voice_input.getnframes()),dtype='<i2').astype(float)/32768
+                    audio_rate=voice_input.getframerate()
+                for j in range(count):
+                    chunk=audio_samples[int(j*audio_rate/FPS):int((j+1)*audio_rate/FPS)]
+                    global SPEECH_LEVEL
+                    SPEECH_LEVEL=min(1.,float(np.sqrt(np.mean(chunk*chunk)))*8) if len(chunk) else 0.
+                    p.stdin.write(frame(s,i,len(plan['scenes']),j/max(1,count-1)).tobytes())
                 p.stdin.close()
                 if p.wait(timeout=120):raise RuntimeError('Scene encoding failed')
             finally:
@@ -87,7 +99,7 @@ def render(plan,folder):
     metadata=dict(title=plan['title'],description=description,tags=['Shorts','economics','The Price of Everything'],privacyStatus='private')
     (folder/'metadata.json').write_text(json.dumps(metadata,indent=2))
     (folder/'plan.json').write_text(json.dumps(plan,indent=2))
-    qa=dict(width=W,height=H,fps=FPS,duration=round(float(info['format']['duration']),3),audio=True,codec=vs['codec_name'],sha256=sha(video),bytes=video.stat().st_size,full_decode=True,voice='flite-slt-offline')
+    qa=dict(width=W,height=H,fps=FPS,duration=round(float(info['format']['duration']),3),audio=True,codec=vs['codec_name'],sha256=sha(video),bytes=video.stat().st_size,full_decode=True,voice=plan.get('voice_engine','flite-slt-offline'))
     (folder/'qa.json').write_text(json.dumps(qa,indent=2))
     for p in parts:p.unlink()
     for pattern in ('voice-*.wav','speech-*.txt'):
