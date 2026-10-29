@@ -9,7 +9,7 @@ def config():
     return {'web':{'client_id':client,'client_secret':secret,'auth_uri':'https://accounts.google.com/o/oauth2/auth','token_uri':'https://oauth2.googleapis.com/token','redirect_uris':[base+'/oauth/google/callback']}}
 def flow(state=None,verifier=None):
     from google_auth_oauthlib.flow import Flow
-    f=Flow.from_client_config(config(),scopes=SCOPES,state=state,code_verifier=verifier)
+    f=Flow.from_client_config(config(),scopes=SCOPES,state=state,code_verifier=verifier,autogenerate_code_verifier=verifier is None)
     f.redirect_uri=config()['web']['redirect_uris'][0]
     return f
 

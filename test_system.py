@@ -52,6 +52,19 @@ class SystemTests(unittest.TestCase):
   self.assertEqual(len(self.client.get('/api/jobs',headers=self.auth).json()),1)
  def test_research_required(self):
   with self.assertRaises(ValueError):engine.enqueue({'fact_checked':False},'bad')
+ def test_google_state_is_single_use_and_pkce_enabled(self):
+  import youtube
+  with patch.dict(os.environ,{'GOOGLE_CLIENT_ID':'test-client','GOOGLE_CLIENT_SECRET':'test-secret','SHORTS_PUBLIC_URL':'https://studio.example'}):
+   f=youtube.flow();url,state=f.authorization_url()
+   self.assertTrue(f.code_verifier);self.assertIn('code_challenge=',url)
+  with self.assertRaises(ValueError):youtube.callback('invalid-state','code')
+  with store.database() as c:c.execute('INSERT INTO settings VALUES(?,?)',('oauth:expired',json.dumps({'expires':0,'verifier':'x'})))
+  with self.assertRaises(ValueError):youtube.callback('expired','code')
+  with store.database() as c:self.assertIsNone(c.execute("SELECT value FROM settings WHERE key='oauth:expired'").fetchone())
+ def test_third_interrupted_attempt_becomes_failed(self):
+  jid,_=engine.enqueue_next()
+  with store.database() as c:c.execute("UPDATE jobs SET status='rendering',attempts=3")
+  engine.recover();self.assertEqual(app.get_job(jid)['status'],'failed')
  def test_legacy_draft_preserved(self):
   r=self.client.post('/api/drafts',headers=self.auth,json={'title':'Legacy draft','script':'A draft remains available without overwriting earlier content.'})
   self.assertEqual(r.status_code,201);self.assertEqual(len(self.client.get('/api/drafts',headers=self.auth).json()),1)
