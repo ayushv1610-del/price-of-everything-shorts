@@ -248,3 +248,10 @@ def test_import(body:TestImport):
                   (jid,key,json.dumps(plan),'ready',time.time(),time.time(),json.dumps(qa)))
         event(c,jid,'imported_authorized_test',body.sha256)
     return {'id':jid,'status':'ready','qa':qa}
+
+
+@app.get('/api/jobs/{jid}/status',dependencies=[Depends(require_admin)])
+def job_status(jid:str):
+    row=get_job(jid)
+    return {'id':jid,'status':row['status'],'attempts':row['attempts'],'error':row['error'],
+            'youtube_id':row['youtube_id'],'qa':json.loads(row['qa']) if row['qa'] else None}
