@@ -44,3 +44,13 @@ python -m unittest -v test_production test_system
 Install ffmpeg with the `flite` audio filter and DejaVu fonts for the renderer (included in Docker). Use `renderer.render(catalog.plan_for(catalog.CATALOG[0]), output_folder)` for a real media integration test. Tests cover auth, CSRF-origin checks, unique topic selection, catalog exhaustion, render retry limits, crash recovery, upload gates, token-file denial and old draft compatibility. Synthetic narration is a basic offline voice; premium voice and richer media are separate quality upgrades requiring cost decisions where applicable.
 
 The mounted volume is durable across redeploys, not an offsite backup. No external backup service or billing changes have been enabled.
+
+## Cartoon automation (current implementation)
+
+Set `SHORTS_CONTENT_MODE=cartoon` for the reviewed original story bank in `cartoon_stories.py`. The worker queues one unused story at or after 09:00 Asia/Kolkata each day. It stops when the bank is exhausted rather than repeating scripts. The initial bank contains three distinct stories. This does not include unlimited story generation or automatic analytics-driven revisions.
+
+The Docker build installs `requirements-voice.txt`, downloads pinned Kokoro release assets, checks exact SHA-256 digests, and bundles them outside the persistent volume. Neural voice inference runs locally; it does not call a paid voice API. Rendering normalizes dialogue to stereo AAC at 48kHz and reports per-line voice validation. Mouth motion responds to speech energy, not phoneme-level alignment.
+
+`SHORTS_AUTO_PUBLISH=1` enables the worker's public-upload step only for reviewed cartoon plans whose QA reports validated dialogue and whose current video hash matches the validated hash. Google authorization, the confirmed `YOUTUBE_CHANNEL_ID`, and correct per-plan audience settings are required. Old prototypes and the silent imported test do not qualify for this automatic worker. Ambiguous upload outcomes are held for reconciliation and never automatically uploaded again.
+
+Run `python -m unittest -v test_dialogue test_production test_system` for automated coverage. A real local queue-render integration test produced a 15.592-second cartoon with all five Kokoro lines validated. Deployed behavior must be independently verified after each release.

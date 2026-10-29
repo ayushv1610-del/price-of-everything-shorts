@@ -52,13 +52,17 @@ def frame(s,i,total,p):
  if i==4:cx=375+int(ease*300);cy=760+int(ease*190)
  d.polygon([(cx-40,cy),(cx+40,cy),(cx,cy+110)],fill='#bd7a39')
  colors=['#ffc3cf','#ac825f','#b8eac7']
- for k in range(3 if i>=1 else 1):d.ellipse((cx-45,cy-45-k*44,cx+45,cy+35-k*44),fill=colors[k],outline='#754765',width=3)
+ for k in range(s.get('scoops',3 if i>=1 else 1)):
+  squash=.5 if s.get('melting') else 1.
+  d.ellipse((cx-45,cy-int((45+k*44)*squash),cx+45,cy+int((35-k*44)*squash)),fill=colors[k],outline='#754765',width=3)
+ if s.get('melting'):d.ellipse((cx-65,cy+95,cx+65,cy+120),fill='#ffc3cf')
  t=i+p
- character(d,165,790+math.sin(t*12)*9,'fox',i in [0,1,3],t)
- character(d,430,840+math.sin(t*12+2)*7,'bunny',i==2,t+.4,.8)
- if i>=3:character(d,615 if i==3 else 600-int(ease*140),900,'duck',i==4,t+.8,.55)
+ character(d,165,790+math.sin(t*12)*9,'fox',s.get('speaker')=='fox',t)
+ character(d,430,840+math.sin(t*12+2)*7,'bunny',s.get('speaker')=='bunny',t+.4,.8)
+ if i>=2:character(d,615 if i==3 else 600-int(ease*140),900,'duck',s.get('speaker')=='duck',t+.8,.55)
  if i==1:
   for k in range(3):d.ellipse((70+k*28,640,93+k*28,663),fill='#ffd24e',outline='#bf842a',width=2)
+ if s.get('clue'):d.ellipse((603,893,618,908),fill='#ffc3cf')
  # Dialogue bubble and safe-area subtitles.
  d.rounded_rectangle((35,240,685,365),radius=28,fill='white')
  ls=renderer.lines(d,s['caption'],f(30),590)

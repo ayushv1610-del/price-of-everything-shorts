@@ -1,9 +1,12 @@
 FROM python:3.12-slim
 RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt requirements-voice.txt ./
+RUN pip install --no-cache-dir -r requirements-voice.txt
+ENV SHORTS_VOICE_MODEL_DIR=/opt/voice-models
+COPY download_voice_models.py ./
+RUN python download_voice_models.py
 COPY *.py ./
 COPY dashboard.html ./
-ENV PORT=8080
+ENV PORT=8080 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 CMD ["sh","-c","python -m uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080} --workers 1"]

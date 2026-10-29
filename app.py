@@ -26,7 +26,7 @@ def require_admin(request:Request,authorization:str|None=Header(default=None)):
     candidate=authorization or ('Bearer '+request.cookies.get('shorts_admin',''))
     authorized=bool(TOKEN and secrets.compare_digest(candidate,'Bearer '+TOKEN))
     operator=os.environ.get('SHORTS_TEST_OPERATOR_TOKEN','')
-    if (operator and request.url.path.startswith(('/api/test-import','/api/jobs/'))
+    if (operator and request.url.path.startswith(('/api/test-import','/api/jobs/','/api/produce'))
         and time.time()<float(os.environ.get('SHORTS_TEST_OPERATOR_EXPIRES','0'))
         and secrets.compare_digest(candidate,'Bearer '+operator)):
         authorized=True
@@ -85,7 +85,7 @@ def drafts():
 @app.get('/api/status',dependencies=[Depends(require_admin)])
 def status():
     with database() as c:counts={r[0]:r[1] for r in c.execute('SELECT status,count(*) FROM jobs GROUP BY status')}
-    return {'jobs':counts,'daily_enabled':setting('daily_enabled',True),'youtube_connected':(ROOT/'google-token.json').exists(),'google_configured':bool(os.environ.get('GOOGLE_CLIENT_ID') and os.environ.get('GOOGLE_CLIENT_SECRET')),'channel':setting('youtube_channel'),'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1','free_mb':round(shutil.disk_usage(ROOT).free/1024**2),'catalog_size':len(engine.CATALOG)}
+    return {'jobs':counts,'daily_enabled':setting('daily_enabled',True),'youtube_connected':(ROOT/'google-token.json').exists(),'google_configured':bool(os.environ.get('GOOGLE_CLIENT_ID') and os.environ.get('GOOGLE_CLIENT_SECRET')),'channel':setting('youtube_channel'),'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1','free_mb':round(shutil.disk_usage(ROOT).free/1024**2),'catalog_size':len(engine.CATALOG),'content_mode':os.environ.get('SHORTS_CONTENT_MODE','explainers'),'auto_publish':os.environ.get('SHORTS_AUTO_PUBLISH')=='1','schedule_timezone':'Asia/Kolkata','schedule_hour':9}
 @app.get('/api/jobs',dependencies=[Depends(require_admin)])
 def jobs():
     with database() as c:

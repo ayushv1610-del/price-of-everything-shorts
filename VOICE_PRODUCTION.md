@@ -17,6 +17,6 @@ https://github.com/thewh1teagle/kokoro-onnx
 
 Model filenames: `kokoro-v1.0.onnx`, `voices-v1.0.bin`. Do not commit model binaries or credentials. Upstream runtime is MIT; model weights are Apache 2.0. Preserve their respective notices when packaging.
 
-Verified local output: 720x1280, 30fps, 18.476 seconds, H.264/AAC; complete decode passed. The cartoon renderer measures the speech signal each frame to drive mouth opening. Timing is audio-reactive, not phoneme-level lip sync. Original code-drawn animation remains basic. This checkpoint was not deployed and the neural-voice pilot has not been publicly uploaded.
+Verified local output: 720x1280, 30fps, 18.476 seconds, H.264/AAC; complete decode passed. The cartoon renderer measures the speech signal each frame to drive mouth opening. Timing is audio-reactive, not phoneme-level lip sync. Original code-drawn animation remains basic. The user-approved neural-voice pilot was later published as ITYm5XS6zGs. See README for the subsequent cloud automation implementation and verify deployment status independently.
 
 Remaining: provision model assets in the separate Shorts runtime, connect voice validation to the deployed queue and publishing gate, add story diversity and performance retrieval, and verify the whole deployed workflow. Existing demo publishing exclusions remain in place. The already published silent test is fv31OtDTlq0. JARVIS is outside scope.

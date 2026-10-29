@@ -82,6 +82,27 @@ class SystemTests(unittest.TestCase):
    self.assertEqual(self.client.get('/api/status',headers=h).status_code,401)
   with patch.dict(os.environ,{'SHORTS_TEST_OPERATOR_TOKEN':'limited-test','SHORTS_TEST_OPERATOR_EXPIRES':'0'}):
    self.assertEqual(self.client.post('/api/test-import',headers=h,json={}).status_code,401)
+ def test_cartoon_catalog_is_unique_and_stops_when_exhausted(self):
+  with patch.dict(os.environ,{'SHORTS_CONTENT_MODE':'cartoon'}):
+   ids=[engine.enqueue_next()[0] for _ in range(3)]
+   self.assertEqual(len(set(ids)),3)
+   self.assertEqual(engine.enqueue_next(),(None,False))
+ def test_autopublish_rejects_ready_video_without_dialogue(self):
+  import youtube
+  jid,_=engine.enqueue_next()
+  with store.database() as c:c.execute("UPDATE jobs SET status='ready',qa=? WHERE id=?",(json.dumps({'full_decode':True}),jid))
+  with patch.dict(os.environ,{'SHORTS_AUTO_PUBLISH':'1'}),patch.object(youtube,'upload_public') as upload:
+   self.assertFalse(engine.publish_next());upload.assert_not_called()
+ def test_auto_upload_does_not_duplicate_or_retry_unknown_outcome(self):
+  import youtube,hashlib
+  plan={'fictional':True,'visual_style':'cartoon','publication_ready':True,'made_for_kids':True,'scenes':[{}, {}, {}]}
+  jid,_=engine.enqueue(plan,'story:test')
+  folder=self.root/jid;folder.mkdir();(folder/'video.mp4').write_bytes(b'validated test media')
+  qa={'dialogue_validated':True,'sha256':hashlib.sha256(b'validated test media').hexdigest()}
+  with store.database() as c:c.execute("UPDATE jobs SET status='ready',qa=? WHERE id=?",(json.dumps(qa),jid))
+  with patch.dict(os.environ,{'SHORTS_AUTO_PUBLISH':'1'}),patch.object(youtube,'upload_public',side_effect=RuntimeError('connection lost')) as upload:
+   self.assertTrue(engine.publish_next());self.assertFalse(engine.publish_next());self.assertEqual(upload.call_count,1)
+  self.assertEqual(app.get_job(jid)['status'],'upload_unknown')
  def test_legacy_draft_preserved(self):
   r=self.client.post('/api/drafts',headers=self.auth,json={'title':'Legacy draft','script':'A draft remains available without overwriting earlier content.'})
   self.assertEqual(r.status_code,201);self.assertEqual(len(self.client.get('/api/drafts',headers=self.auth).json()),1)
