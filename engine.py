@@ -25,13 +25,16 @@ def enqueue(plan,key,scheduled_date=None):
         c.execute('BEGIN IMMEDIATE')
         if scheduled_date:
             old=c.execute('SELECT job FROM daily_slots WHERE date=?',(scheduled_date,)).fetchone()
-            if old:return old[0],False
+            if old:
+                previous=c.execute('SELECT status FROM jobs WHERE id=?',(old[0],)).fetchone()
+                count=c.execute("SELECT count(*) FROM jobs WHERE json_extract(plan,'$.scheduled_date')=?",(scheduled_date,)).fetchone()[0]
+                if not previous or previous[0]!='failed' or count>=3:return old[0],False
             plan=dict(plan,scheduled_date=scheduled_date)
         old=c.execute('SELECT id FROM jobs WHERE key=?',(key,)).fetchone()
         if old:return old[0],False
         c.execute('INSERT INTO jobs(id,key,plan,status,created,updated) VALUES(?,?,?,?,?,?)',(jid,key,json.dumps(plan),'queued',now,now))
         if scheduled_date:
-            c.execute('INSERT INTO daily_slots(date,job) VALUES(?,?)',(scheduled_date,jid))
+            c.execute('INSERT OR REPLACE INTO daily_slots(date,job) VALUES(?,?)',(scheduled_date,jid))
         event(c,jid,'queued')
     return jid,True
 
@@ -67,7 +70,13 @@ def tick():
         key='last_scheduled_v2' if feed_enabled() else 'last_daily'
         if os.environ.get('SHORTS_CONTENT_MODE')=='cartoon' and local.hour<9:
             today=None
-        if today and setting(key)!=today:
+        replace_failed=False
+        if today and feed_enabled():
+            with database() as c:
+                slot=c.execute("SELECT jobs.status FROM daily_slots JOIN jobs ON jobs.id=daily_slots.job WHERE date=?",(today,)).fetchone()
+                attempts=c.execute("SELECT count(*) FROM jobs WHERE json_extract(plan,'$.scheduled_date')=?",(today,)).fetchone()[0]
+            replace_failed=bool(slot and slot[0]=='failed' and attempts<3)
+        if today and (setting(key)!=today or replace_failed):
             jid,created=enqueue_next(scheduled_date=today) if feed_enabled() else enqueue_next()
             from store import set_setting
             # A day is consumed only after a durable queue insert, never on exhaustion.

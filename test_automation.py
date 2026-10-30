@@ -72,3 +72,16 @@ class SchedulingTests(unittest.TestCase):
   with patch('youtube.client',return_value=api),patch.object(engine,'_last_reconcile',None):engine.reconcile_known_uploads()
   with store.database() as c:row=c.execute('SELECT status,youtube_id FROM jobs').fetchone()
   self.assertEqual(tuple(row),('published','remote123'))
+
+ def test_daily_failed_story_falls_back_but_never_unknown_upload(self):
+  plans=story_feed.plans()
+  first,_=engine.enqueue(plans[0],'story:'+plans[0]['topic'],scheduled_date='2026-10-30')
+  with store.database() as c:c.execute("UPDATE jobs SET status='upload_unknown' WHERE id=?",(first,))
+  self.assertFalse(engine.enqueue(plans[1],'story:'+plans[1]['topic'],scheduled_date='2026-10-30')[1])
+  with store.database() as c:c.execute("UPDATE jobs SET status='failed' WHERE id=?",(first,))
+  second,created=engine.enqueue(plans[1],'story:'+plans[1]['topic'],scheduled_date='2026-10-30')
+  self.assertTrue(created);self.assertNotEqual(first,second)
+  with store.database() as c:c.execute("UPDATE jobs SET status='failed' WHERE id=?",(second,))
+  third,_=engine.enqueue(plans[2],'story:'+plans[2]['topic'],scheduled_date='2026-10-30')
+  with store.database() as c:c.execute("UPDATE jobs SET status='failed' WHERE id=?",(third,))
+  self.assertFalse(engine.enqueue(plans[3],'story:'+plans[3]['topic'],scheduled_date='2026-10-30')[1])
