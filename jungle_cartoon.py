@@ -66,7 +66,7 @@ def frame(s,i,total,p):
   d.line((cx,cy-61,cx,cy+61),fill='#ffe8ac',width=2)
   d.line((cx-43,cy,cx+43,cy),fill='#ffe8ac',width=2)
   d.line([(cx,cy+61),(cx-10,cy+89),(cx+13,cy+112)],fill='#e74f58',width=3)
- else:
+ elif setting=='mango':
   # Fallen seed, juice clue, then a planted seed and watering, no instant mature tree.
   d.ellipse((295,922,348,943),fill='#9d653c')
   if i>=3:
@@ -74,12 +74,32 @@ def frame(s,i,total,p):
    for k in range(5):
     yy=820+(k*26+t*70)%105
     d.ellipse((310+k*5,yy,315+k*5,yy+10),fill='#64bad6')
+
+ if setting=='ball':
+  if i<3: bx,by=402,510
+  elif i==3: bx,by=402-100*ease,510+390*ease
+  else: bx,by=302+35*math.sin(p*math.pi*2),900-40*abs(math.sin(p*math.pi*2))
+  d.ellipse((bx-30,by-30,bx+30,by+30),fill='#faf5e8',outline='#343951',width=3)
+  d.regular_polygon((bx,by,13),5,fill='#343951')
+ if setting=='drum':
+  d.rectangle((248,872,334,954),fill='#eb9b55',outline='#794c3a',width=3)
+  d.ellipse((248,855,334,890),fill='#fff5cb',outline='#794c3a',width=3)
+  for xx in range(254,331,22):d.line((xx,888,xx+10,946),fill='#fff5cb',width=3)
+ if setting=='rain':
+  d.ellipse((220,957,490,985),fill='#8ac6de')
+  if i<4:
+   for k in range(32):
+    xx=(k*83+t*35)%720; yy=390+(k*49+t*150)%600
+    d.line((xx,yy,xx-4,yy+17),fill='#73b6d2',width=2)
+  d.line((310,610,310,795),fill='#795649',width=6)
+  d.pieslice((155,505,465,715),180,360,fill='#e47c92',outline='#a84e71',width=3)
  speaker=s.get('speaker')
  friend(d,150,820+math.sin(t*2)*4,'golu',t,speaker=='golu',1.12,trunk_raise=70*math.sin(p*math.pi) if i==3 else 0)
  friend(d,365,866+math.sin(t*2+.8)*3,'tara',t+.3,speaker=='tara',.9)
  # Bird on a low branch, within frame throughout the mystery.
  d.line((575,725,695,725),fill='#986441',width=14)
  friend(d,626,660+math.sin(t*2+1)*3,'mithu',t+.6,speaker=='mithu',.65)
+ if setting=='drum' and i<=2:d.line((649,683,669,650-8*math.sin(p*math.pi*4)),fill='#986441',width=6)
  if setting=='mango' and i>=1:d.ellipse((630,660,642,668),fill='#ffc02f')
  text_panel(d,s['caption'],(35,230,685,370),36,'#343951','#fffdf1')
  text_panel(d,s['narration'],(30,1040,690,1235),29,'#fffdf1','#313e59')
