@@ -69,3 +69,21 @@ The renderer checks every encoded dialogue interval after muxing. Missing or
 silent dialogue fails the render; no replacement voice or silent fallback is used.
 Production status exposes remaining story count and publishable count, so a finite
 reviewed bank is not mistaken for unlimited autonomous story creation.
+
+
+## Unattended Hindi publishing
+
+`SHORTS_FEED_ENABLED=1`, cartoon mode, worker, auto publishing and public publishing
+must all be enabled. The cloud worker reserves one durable daily slot at 09:00
+Asia/Kolkata (catches up after downtime), renders a new story, checks encoded audio
+with independent multilingual Whisper, and uploads only matching audible dialogue.
+The first upload after enabling the new feed catches up the current day's slot.
+`story_feed.json` is a bounded Hindi story inbox, replenished by the separate recurring
+ChatGPT task. The service refreshes it from this exact repository, validates schema,
+caches the last valid copy, and rejects reused story IDs and identical scripts.
+This is AI story authoring plus local neural synthesis/ASR, not an unlimited static bank.
+Failed Hindi checks remain failed; the system never weakens QA to meet a schedule.
+Ambiguous uploads without an ID require reconciliation; known IDs are checked read-only
+and never uploaded twice. Media older than 14 days is pruned after publication;
+SQLite records and script hashes remain. /health reports the last public upload and
+schedule state without exposing credentials. No paid generation API is used.

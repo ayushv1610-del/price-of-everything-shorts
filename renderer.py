@@ -108,14 +108,23 @@ def render(plan,folder):
         rms=float(np.sqrt(np.mean(segment*segment))) if len(segment) else 0.
         if rms<.003:raise ValueError('Encoded dialogue is missing or silent')
         encoded_levels.append(round(rms,5));offset+=duration
+    language_qa=None
+    if plan.get('automated_language_review'):
+        from language_qa import verify_samples
+        language_qa=verify_samples(decoded.astype('float32'),plan['scenes'],durations)
+        if not language_qa['passed']:
+            (folder/'language-qa.json').write_text(json.dumps(language_qa,ensure_ascii=False,indent=2))
+            raise ValueError('Hindi speech did not match script; see language-qa.json')
     temp.replace(video)
     render_frame(plan['scenes'][0],0,len(plan['scenes']),.7).save(folder/'thumbnail.jpg')
     (folder/'captions.srt').write_text('\n'.join(subs))
     description='\n'.join([plan['title'],'','Sources:']+[s['url'] for s in plan['sources']]+['','Original fictional cartoon with synthetic character voices. #Shorts' if plan.get('fictional') else 'Original animation and synthetic narration. Educational explainer. #Shorts'])
-    metadata=dict(defaultLanguage=plan.get('language','en'),title=plan['title'],description=description,tags=['Shorts','economics','The Price of Everything'],privacyStatus='private')
+    metadata=dict(defaultLanguage=plan.get('language','en'),title=plan['title'],description=description,tags=['Shorts','HindiCartoon','CartoonStory'] if plan.get('fictional') else ['Shorts','economics','The Price of Everything'],privacyStatus='private')
     (folder/'metadata.json').write_text(json.dumps(metadata,indent=2))
     (folder/'plan.json').write_text(json.dumps(plan,indent=2))
     qa=dict(width=W,height=H,fps=FPS,duration=round(float(info['format']['duration']),3),audio=True,codec=vs['codec_name'],sha256=sha(video),bytes=video.stat().st_size,full_decode=True,voice=plan['voice_engine'],dialogue_validated=bool(voice_checks) and len(voice_checks)==len(plan['scenes']),voice_lines=len(voice_checks),language=plan.get('language','en'),language_review_required=bool(plan.get('language_review_required')),encoded_audio_rms=encoded_levels)
+    qa['language_qa']=language_qa
+    qa['language_validated']=bool(language_qa and language_qa['passed'])
     (folder/'qa.json').write_text(json.dumps(qa,indent=2))
     for p in parts:p.unlink()
     for pattern in ('voice-*.wav','speech-*.txt'):

@@ -1,3 +1,4 @@
 -r requirements.txt
 kokoro-onnx==0.6.1
 soundfile==0.14.0
+faster-whisper==1.2.1

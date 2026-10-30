@@ -13,6 +13,7 @@ def database():
         con.execute('PRAGMA journal_mode=WAL')
         con.execute("CREATE TABLE IF NOT EXISTS drafts (id INTEGER PRIMARY KEY, title TEXT NOT NULL, script TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'draft', created_at TEXT NOT NULL)")
         con.execute('CREATE TABLE IF NOT EXISTS jobs (id TEXT PRIMARY KEY, key TEXT UNIQUE, plan TEXT NOT NULL, status TEXT NOT NULL, attempts INTEGER DEFAULT 0, error TEXT, created REAL, updated REAL, qa TEXT, approved_hash TEXT, youtube_id TEXT)')
+        con.execute('CREATE TABLE IF NOT EXISTS daily_slots (date TEXT PRIMARY KEY, job TEXT NOT NULL)')
         con.execute('CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY, job TEXT, action TEXT, detail TEXT, created REAL)')
         con.execute('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)')
         con.commit()

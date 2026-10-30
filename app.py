@@ -47,7 +47,18 @@ async def security(request,call_next):
 
 @app.get('/health')
 def health():
-    return {'status':'ok','service':'shorts-engine','version':'2.0','youtube_connected':(ROOT/'google-token.json').exists(),'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1'}
+    with database() as c:
+        latest=c.execute("SELECT youtube_id,updated FROM jobs WHERE status='published' ORDER BY updated DESC LIMIT 1").fetchone()
+        counts={r[0]:r[1] for r in c.execute('SELECT status,count(*) FROM jobs GROUP BY status')}
+    return {'status':'ok','service':'shorts-engine','version':'3.0',
+            'youtube_connected':(ROOT/'google-token.json').exists(),
+            'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1',
+            'auto_publish':os.environ.get('SHORTS_AUTO_PUBLISH')=='1',
+            'feed_enabled':engine.feed_enabled(),'schedule':'09:00 Asia/Kolkata',
+            'daily_enabled':setting('daily_enabled',True),
+            'last_scheduled_date':setting('last_scheduled_v2'),
+            'last_publication':dict(latest) if latest else None,'queue':counts,
+            'stories_remaining':engine.catalog_status()['remaining']}
 @app.get('/ready')
 def ready():
     try:
@@ -85,7 +96,7 @@ def drafts():
 @app.get('/api/status',dependencies=[Depends(require_admin)])
 def status():
     with database() as c:counts={r[0]:r[1] for r in c.execute('SELECT status,count(*) FROM jobs GROUP BY status')}
-    return {'jobs':counts,'daily_enabled':setting('daily_enabled',True),'youtube_connected':(ROOT/'google-token.json').exists(),'google_configured':bool(os.environ.get('GOOGLE_CLIENT_ID') and os.environ.get('GOOGLE_CLIENT_SECRET')),'channel':setting('youtube_channel'),'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1','free_mb':round(shutil.disk_usage(ROOT).free/1024**2),'catalog_size':engine.catalog_status()['total'],'catalog':engine.catalog_status(),'content_mode':os.environ.get('SHORTS_CONTENT_MODE','explainers'),'auto_publish':os.environ.get('SHORTS_AUTO_PUBLISH')=='1','schedule_timezone':'Asia/Kolkata','schedule_hour':9}
+    return {'jobs':counts,'daily_enabled':setting('daily_enabled',True),'youtube_connected':(ROOT/'google-token.json').exists(),'google_configured':bool(os.environ.get('GOOGLE_CLIENT_ID') and os.environ.get('GOOGLE_CLIENT_SECRET')),'channel':setting('youtube_channel'),'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1','free_mb':round(shutil.disk_usage(ROOT).free/1024**2),'last_scheduled_date':setting('last_scheduled_v2'),'feed_enabled':engine.feed_enabled(),'catalog_size':engine.catalog_status()['total'],'catalog':engine.catalog_status(),'content_mode':os.environ.get('SHORTS_CONTENT_MODE','explainers'),'auto_publish':os.environ.get('SHORTS_AUTO_PUBLISH')=='1','schedule_timezone':'Asia/Kolkata','schedule_hour':9}
 @app.get('/api/jobs',dependencies=[Depends(require_admin)])
 def jobs():
     with database() as c:
@@ -109,7 +120,7 @@ def get_job(jid):
 @app.get('/api/jobs/{jid}/assets/{name}',dependencies=[Depends(require_admin)])
 def asset(jid:str,name:str):
     get_job(jid)
-    allowed={'video.mp4','thumbnail.jpg','captions.srt','metadata.json','plan.json','qa.json'}
+    allowed={'video.mp4','thumbnail.jpg','captions.srt','metadata.json','plan.json','qa.json','language-qa.json'}
     if name not in allowed:raise HTTPException(404,'Unknown asset')
     path=ROOT/jid/name
     if not path.is_file():raise HTTPException(404,'Asset not ready')
@@ -181,7 +192,7 @@ def publish(jid:str,body:PublicUpload):
         return {'youtube_id':row['youtube_id'],'status':row['status']}
     plan=json.loads(row['plan'])
     # Render QA alone does not establish editorial quality. Existing demos are excluded.
-    if plan.get('language_review_required') or not plan.get('publication_ready') or plan.get('topic') in {
+    if (plan.get('language_review_required') and not (plan.get('automated_language_review') and json.loads(row['qa'] or '{}').get('language_validated'))) or not plan.get('publication_ready') or plan.get('topic') in {
         'inflation','compounding','basket','hotel-comparison-pilot','cartoon-icecream'}:
         raise HTTPException(409,'Prototype excluded from public publishing')
     if row['status']!='ready' or not row['qa']:
@@ -262,4 +273,8 @@ def production_status():
     # Restricted operator can inspect queue and bank without reading credentials.
     with database() as c:
         rows=c.execute('SELECT id,key,status,youtube_id,qa FROM jobs ORDER BY created').fetchall()
-    return {'catalog':engine.catalog_status(),'jobs':[dict(row) for row in rows]}
+    return {'catalog':engine.catalog_status(),'jobs':[dict(row) for row in rows],
+            'daily_enabled':setting('daily_enabled',True),'last_scheduled_date':setting('last_scheduled_v2'),
+            'auto_publish':os.environ.get('SHORTS_AUTO_PUBLISH')=='1',
+            'feed_enabled':engine.feed_enabled(),'schedule':'09:00 Asia/Kolkata',
+            'worker_alive':bool(getattr(app.state,'worker',None) and app.state.worker.is_alive())}

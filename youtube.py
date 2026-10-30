@@ -64,7 +64,7 @@ def upload_private(job,folder):
     if not response.get('id'):raise ValueError('YouTube did not return a video ID')
     return response['id']
 
-def upload_public(folder, made_for_kids):
+def upload_public(folder, made_for_kids, on_uploaded=None):
     """Explicit public upload; caller owns transactional claim and ambiguity handling."""
     from googleapiclient.http import MediaFileUpload
     expected=os.environ.get('YOUTUBE_CHANNEL_ID')
@@ -81,6 +81,7 @@ def upload_public(folder, made_for_kids):
     while result is None:
         _,result=request.next_chunk(num_retries=0)
     if not result.get('id'):raise ValueError('Missing YouTube video ID')
+    if on_uploaded:on_uploaded(result['id'])
     actual=client().videos().list(part='status',id=result['id']).execute()
     items=actual.get('items',[])
     public=bool(items and items[0]['status'].get('privacyStatus')=='public')
