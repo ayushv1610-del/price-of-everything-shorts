@@ -5,6 +5,31 @@ from store import database, event, setting, ROOT
 from catalog import CATALOG, plan_for
 from renderer import render
 
+SCHEDULE_HOURS=(9,12,15,18,21)
+SCHEDULE_LABEL='09:00, 12:00, 15:00, 18:00, 21:00 Asia/Kolkata'
+
+def schedule_feed(local):
+    from store import set_setting
+    today=local.date().isoformat()
+    for hour in SCHEDULE_HOURS:
+        if local.hour<hour:break
+        # Keep the original first-slot key so upgrading never duplicates today's upload.
+        slot_key=today if hour==9 else f'{today}T{hour:02d}:00'
+        with database() as c:
+            slot=c.execute('SELECT jobs.status FROM daily_slots JOIN jobs ON jobs.id=daily_slots.job WHERE date=?',(slot_key,)).fetchone()
+            attempts=c.execute("SELECT count(*) FROM jobs WHERE json_extract(plan,'$.scheduled_date')=?",(slot_key,)).fetchone()[0]
+        if slot and (slot[0]!='failed' or attempts>=3):continue
+        jid,created=enqueue_next(scheduled_date=slot_key)
+        if jid:
+            set_setting('last_scheduled_v2',today)
+            if created:
+                with database() as c:event(c,jid,'daily_scheduled',slot_key)
+        elif setting('supply_alert_date')!=today:
+            set_setting('supply_alert_date',today)
+            with database() as c:event(c,None,'story_supply_empty',today)
+        # Reserve only one slot per tick; renders and uploads retain existing QA gates.
+        break
+
 def feed_enabled():
     return os.environ.get('SHORTS_CONTENT_MODE')=='cartoon' and os.environ.get('SHORTS_FEED_ENABLED')=='1'
 
@@ -67,25 +92,14 @@ def tick():
     if setting('daily_enabled',True):
         local=datetime.now(ZoneInfo('Asia/Kolkata'))
         today=local.date().isoformat()
-        key='last_scheduled_v2' if feed_enabled() else 'last_daily'
-        if os.environ.get('SHORTS_CONTENT_MODE')=='cartoon' and local.hour<9:
-            today=None
-        replace_failed=False
-        if today and feed_enabled():
-            with database() as c:
-                slot=c.execute("SELECT jobs.status FROM daily_slots JOIN jobs ON jobs.id=daily_slots.job WHERE date=?",(today,)).fetchone()
-                attempts=c.execute("SELECT count(*) FROM jobs WHERE json_extract(plan,'$.scheduled_date')=?",(today,)).fetchone()[0]
-            replace_failed=bool(slot and slot[0]=='failed' and attempts<3)
-        if today and (setting(key)!=today or replace_failed):
-            jid,created=enqueue_next(scheduled_date=today) if feed_enabled() else enqueue_next()
-            from store import set_setting
-            # A day is consumed only after a durable queue insert, never on exhaustion.
+        if feed_enabled():
+            schedule_feed(local)
+        elif (os.environ.get('SHORTS_CONTENT_MODE')!='cartoon' or local.hour>=9) and setting('last_daily')!=today:
+            jid,created=enqueue_next()
             if jid:
-                set_setting(key,today)
+                from store import set_setting
+                set_setting('last_daily',today)
                 with database() as c:event(c,jid,'daily_scheduled',today)
-            elif setting('supply_alert_date')!=today:
-                set_setting('supply_alert_date',today)
-                with database() as c:event(c,None,'story_supply_empty',today)
     with database() as c:
         c.execute('BEGIN IMMEDIATE')
         row=c.execute("SELECT * FROM jobs WHERE status='queued' AND attempts<3 ORDER BY created LIMIT 1").fetchone()

@@ -6,6 +6,8 @@ from fastapi import FastAPI, Header, HTTPException, Depends, Request, Response
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from pydantic import BaseModel, Field
 import store
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 from store import database, ROOT, event, setting, set_setting
 import engine
 from renderer import sha
@@ -47,14 +49,16 @@ async def security(request,call_next):
 
 @app.get('/health')
 def health():
+    midnight=datetime.now(ZoneInfo('Asia/Kolkata')).replace(hour=0,minute=0,second=0,microsecond=0)
     with database() as c:
+        published_today=c.execute("SELECT count(*) FROM jobs WHERE status='published' AND updated>=? AND updated<?",(midnight.timestamp(),(midnight+timedelta(days=1)).timestamp())).fetchone()[0]
         latest=c.execute("SELECT youtube_id,updated FROM jobs WHERE status='published' ORDER BY updated DESC LIMIT 1").fetchone()
         counts={r[0]:r[1] for r in c.execute('SELECT status,count(*) FROM jobs GROUP BY status')}
     return {'status':'ok','service':'shorts-engine','version':'3.0',
             'youtube_connected':(ROOT/'google-token.json').exists(),
             'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1',
             'auto_publish':os.environ.get('SHORTS_AUTO_PUBLISH')=='1',
-            'feed_enabled':engine.feed_enabled(),'schedule':'09:00 Asia/Kolkata',
+            'feed_enabled':engine.feed_enabled(),'schedule':engine.SCHEDULE_LABEL,'daily_target':len(engine.SCHEDULE_HOURS),'published_today':published_today,
             'daily_enabled':setting('daily_enabled',True),
             'last_scheduled_date':setting('last_scheduled_v2'),
             'last_publication':dict(latest) if latest else None,'queue':counts,
@@ -96,7 +100,7 @@ def drafts():
 @app.get('/api/status',dependencies=[Depends(require_admin)])
 def status():
     with database() as c:counts={r[0]:r[1] for r in c.execute('SELECT status,count(*) FROM jobs GROUP BY status')}
-    return {'jobs':counts,'daily_enabled':setting('daily_enabled',True),'youtube_connected':(ROOT/'google-token.json').exists(),'google_configured':bool(os.environ.get('GOOGLE_CLIENT_ID') and os.environ.get('GOOGLE_CLIENT_SECRET')),'channel':setting('youtube_channel'),'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1','free_mb':round(shutil.disk_usage(ROOT).free/1024**2),'last_scheduled_date':setting('last_scheduled_v2'),'feed_enabled':engine.feed_enabled(),'catalog_size':engine.catalog_status()['total'],'catalog':engine.catalog_status(),'content_mode':os.environ.get('SHORTS_CONTENT_MODE','explainers'),'auto_publish':os.environ.get('SHORTS_AUTO_PUBLISH')=='1','schedule_timezone':'Asia/Kolkata','schedule_hour':9}
+    return {'jobs':counts,'daily_enabled':setting('daily_enabled',True),'youtube_connected':(ROOT/'google-token.json').exists(),'google_configured':bool(os.environ.get('GOOGLE_CLIENT_ID') and os.environ.get('GOOGLE_CLIENT_SECRET')),'channel':setting('youtube_channel'),'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1','free_mb':round(shutil.disk_usage(ROOT).free/1024**2),'last_scheduled_date':setting('last_scheduled_v2'),'feed_enabled':engine.feed_enabled(),'catalog_size':engine.catalog_status()['total'],'catalog':engine.catalog_status(),'content_mode':os.environ.get('SHORTS_CONTENT_MODE','explainers'),'auto_publish':os.environ.get('SHORTS_AUTO_PUBLISH')=='1','schedule_timezone':'Asia/Kolkata','schedule_hour':9,'schedule_hours':list(engine.SCHEDULE_HOURS),'daily_target':len(engine.SCHEDULE_HOURS)}
 @app.get('/api/jobs',dependencies=[Depends(require_admin)])
 def jobs():
     with database() as c:
@@ -111,7 +115,7 @@ def produce():
     return {'id':jid,'created':new}
 class Schedule(BaseModel):enabled:bool
 @app.post('/api/schedule',dependencies=[Depends(require_admin)])
-def schedule(body:Schedule):set_setting('daily_enabled',body.enabled);return {'enabled':body.enabled,'interval':'one new curated story daily at 09:00 Asia/Kolkata'}
+def schedule(body:Schedule):set_setting('daily_enabled',body.enabled);return {'enabled':body.enabled,'interval':engine.SCHEDULE_LABEL}
 
 def get_job(jid):
     with database() as c:r=c.execute('SELECT * FROM jobs WHERE id=?',(jid,)).fetchone()
@@ -276,5 +280,5 @@ def production_status():
     return {'catalog':engine.catalog_status(),'jobs':[dict(row) for row in rows],
             'daily_enabled':setting('daily_enabled',True),'last_scheduled_date':setting('last_scheduled_v2'),
             'auto_publish':os.environ.get('SHORTS_AUTO_PUBLISH')=='1',
-            'feed_enabled':engine.feed_enabled(),'schedule':'09:00 Asia/Kolkata',
+            'feed_enabled':engine.feed_enabled(),'schedule':engine.SCHEDULE_LABEL,'daily_target':len(engine.SCHEDULE_HOURS),
             'worker_alive':bool(getattr(app.state,'worker',None) and app.state.worker.is_alive())}

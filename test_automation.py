@@ -85,3 +85,24 @@ class SchedulingTests(unittest.TestCase):
   third,_=engine.enqueue(plans[2],'story:'+plans[2]['topic'],scheduled_date='2026-10-30')
   with store.database() as c:c.execute("UPDATE jobs SET status='failed' WHERE id=?",(third,))
   self.assertFalse(engine.enqueue(plans[3],'story:'+plans[3]['topic'],scheduled_date='2026-10-30')[1])
+
+ def test_five_slots_spaced_and_durable(self):
+  from datetime import datetime
+  plans=story_feed.plans()
+  with patch.dict('os.environ',{'SHORTS_CONTENT_MODE':'cartoon','SHORTS_FEED_ENABLED':'1'}),patch('story_feed.plans',return_value=plans):
+   engine.schedule_feed(datetime(2026,10,30,8));
+   with store.database() as c:self.assertEqual(c.execute('SELECT count(*) FROM daily_slots').fetchone()[0],0)
+   for hour,expected in [(9,1),(11,1),(12,2),(15,3),(18,4),(21,5),(23,5)]:
+    engine.schedule_feed(datetime(2026,10,30,hour))
+    engine.schedule_feed(datetime(2026,10,30,hour))
+    with store.database() as c:self.assertEqual(c.execute('SELECT count(*) FROM daily_slots').fetchone()[0],expected)
+
+ def test_upgrade_reuses_first_slot_and_catches_up(self):
+  from datetime import datetime
+  plans=story_feed.plans()
+  engine.enqueue(plans[0],'story:'+plans[0]['topic'],scheduled_date='2026-10-30')
+  with patch.dict('os.environ',{'SHORTS_CONTENT_MODE':'cartoon','SHORTS_FEED_ENABLED':'1'}),patch('story_feed.plans',return_value=plans):
+   for _ in range(6):engine.schedule_feed(datetime(2026,10,30,22))
+  with store.database() as c:
+   self.assertEqual(c.execute('SELECT count(*) FROM jobs').fetchone()[0],5)
+   self.assertEqual(c.execute('SELECT count(*) FROM daily_slots').fetchone()[0],5)
