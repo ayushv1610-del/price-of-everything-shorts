@@ -11,12 +11,17 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-noto-core libraqm0
       - run: python -m pip install -r requirements-voice.txt
       - run: python -m unittest -v test_production test_system test_dialogue test_hindi
+      - run: SHORTS_VOICE_MODEL_DIR=/tmp/voice-models python download_voice_models.py
       - name: Real narrated media test
+        env:
+          SHORTS_VOICE_MODEL_DIR: /tmp/voice-models
+          OMP_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
         run: |
           python - <<'PY'
-          from catalog import CATALOG, plan_for
+          from cartoon_stories import STORIES, plan_for_story
           from renderer import render
-          result = render(plan_for(CATALOG[0]), '/tmp/shorts-ci')
+          result = render(plan_for_story(STORIES[0]), '/tmp/shorts-ci')
           assert result['full_decode'] and result['audio']
           assert 12 <= result['duration'] <= 60
           print(result)

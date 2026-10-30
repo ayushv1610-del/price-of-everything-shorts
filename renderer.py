@@ -47,6 +47,7 @@ def frame(scene,index,total,progress):
     return im
 
 def render(plan,folder):
+    if plan.get('voice_engine')!='kokoro':raise ValueError('Natural character dialogue required; rejected voice fallback is disabled')
     folder=Path(folder);folder.mkdir(parents=True,exist_ok=True)
     durations=[]; parts=[]; cursor=0.; subs=[]
     render_frame=frame
@@ -61,12 +62,8 @@ def render(plan,folder):
     for i,s in enumerate(plan['scenes']):
         text=folder/f'speech-{i}.txt';text.write_text(s['narration'])
         wav=folder/f'voice-{i}.wav'
-        # Text file avoids passing narration as filter syntax or shell input.
-        if plan.get('voice_engine')=='kokoro':
-            from kokoro_voice import synthesize
-            voice_checks.append(synthesize(s['narration'],s['speaker'],wav,language=plan.get('language','en')))
-        else:
-            run(['ffmpeg','-v','error','-y','-f','lavfi','-i',f'flite=textfile={text}:voice=slt','-ar','48000',str(wav)])
+        from kokoro_voice import synthesize
+        voice_checks.append(synthesize(s['narration'],s['speaker'],wav,language=plan.get('language','en')))
         length=float(probe(wav)['format']['duration'])+.3
         count=math.ceil(max(3.,length)*FPS);duration=count/FPS
         durations.append(duration)
@@ -118,7 +115,7 @@ def render(plan,folder):
     metadata=dict(defaultLanguage=plan.get('language','en'),title=plan['title'],description=description,tags=['Shorts','economics','The Price of Everything'],privacyStatus='private')
     (folder/'metadata.json').write_text(json.dumps(metadata,indent=2))
     (folder/'plan.json').write_text(json.dumps(plan,indent=2))
-    qa=dict(width=W,height=H,fps=FPS,duration=round(float(info['format']['duration']),3),audio=True,codec=vs['codec_name'],sha256=sha(video),bytes=video.stat().st_size,full_decode=True,voice=plan.get('voice_engine','flite-slt-offline'),dialogue_validated=bool(voice_checks) and len(voice_checks)==len(plan['scenes']),voice_lines=len(voice_checks),language=plan.get('language','en'),language_review_required=bool(plan.get('language_review_required')),encoded_audio_rms=encoded_levels)
+    qa=dict(width=W,height=H,fps=FPS,duration=round(float(info['format']['duration']),3),audio=True,codec=vs['codec_name'],sha256=sha(video),bytes=video.stat().st_size,full_decode=True,voice=plan['voice_engine'],dialogue_validated=bool(voice_checks) and len(voice_checks)==len(plan['scenes']),voice_lines=len(voice_checks),language=plan.get('language','en'),language_review_required=bool(plan.get('language_review_required')),encoded_audio_rms=encoded_levels)
     (folder/'qa.json').write_text(json.dumps(qa,indent=2))
     for p in parts:p.unlink()
     for pattern in ('voice-*.wav','speech-*.txt'):

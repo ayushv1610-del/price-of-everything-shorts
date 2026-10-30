@@ -19,4 +19,11 @@ class HindiTests(unittest.TestCase):
    kokoro_voice.synthesize('मेरी लाल पतंग कहाँ गई?','golu','unused.wav','hi')
   self.assertEqual(fake.create.call_args.kwargs['lang'],'hi')
   self.assertEqual(fake.create.call_args.kwargs['voice'],'hm_omega')
+ def test_missing_or_rejected_voice_fails_before_media_work(self):
+  import renderer
+  for voice in [None,'flite','unknown']:
+   with patch.object(renderer,'run') as run:
+    with self.assertRaises(ValueError):renderer.render({'voice_engine':voice},'/tmp/never-rendered-short')
+    run.assert_not_called()
 if __name__=='__main__':unittest.main()
+

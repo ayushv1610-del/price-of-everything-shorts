@@ -6,7 +6,7 @@ Isolated from JARVIS. Single-replica FastAPI application with a durable SQLite q
 
 Curated source evidence → unique topic queue → offline synthetic narration → original animated 720×1280 H.264/AAC video at 24fps → caption SRT, thumbnail, source-linked metadata → ffprobe validation and full video decode → authenticated review dashboard.
 
-The worker selects one unused topic per UTC day. The initial catalog has **three verified evergreen topics**. When exhausted it stops; it does not invent facts or repeat existing topics. This is a bounded curated producer, not unlimited autonomous web research or an AI growth system. New topics currently require adding reviewed scripts and evidence in `catalog.py` and deploying them.
+In cartoon mode the worker selects one unused story per day after 09:00 Asia/Kolkata. The bank contains three English stories and two Hindi stories; the Hindi stories are held for language review. The three English entries have already been consumed in production. When exhausted it stops without repeating stories. This is a bounded curated producer, not unlimited autonomous script generation or a growth system. New stories require reviewed scripts in `cartoon_stories.py` and a deployment.
 
 Queue transitions: `queued → rendering → ready`; a render gets at most three automatic attempts. Startup recovers interrupted renders. Failed jobs can be retried through the authenticated API. Drafts from the original schema remain intact. Audit events persist in SQLite. The service must run **one replica / one uvicorn worker**; scaling requires a shared transactional queue and object storage.
 
@@ -41,7 +41,7 @@ python -m pip install httpx
 python -m unittest -v test_production test_system
 ```
 
-Install ffmpeg with the `flite` audio filter and DejaVu fonts for the renderer (included in Docker). Use `renderer.render(catalog.plan_for(catalog.CATALOG[0]), output_folder)` for a real media integration test. Tests cover auth, CSRF-origin checks, unique topic selection, catalog exhaustion, render retry limits, crash recovery, upload gates, token-file denial and old draft compatibility. Synthetic narration is a basic offline voice; premium voice and richer media are separate quality upgrades requiring cost decisions where applicable.
+Install ffmpeg, DejaVu/Noto fonts and the voice requirements (included in Docker). Download verified models with `download_voice_models.py`. Use `renderer.render(cartoon_stories.plan_for_story(cartoon_stories.STORIES[0]), output_folder)` for a Hindi media integration test. Tests cover auth, CSRF, unique selection, exhaustion, retry limits, crash recovery, upload gates, language review holds and rejected voice fallback. Missing or unsupported voices fail before encoding; flite is not used.
 
 The mounted volume is durable across redeploys, not an offsite backup. No external backup service or billing changes have been enabled.
 
