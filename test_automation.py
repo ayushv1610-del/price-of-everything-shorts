@@ -27,7 +27,7 @@ class AutomationTests(unittest.TestCase):
   feed[0]['scenes'][0]['setting']='remote-code'
   with self.assertRaises(ValueError):story_feed.validate(feed)
  def test_feed_offline_fallback_and_bounded_size(self):
-  with tempfile.TemporaryDirectory() as tmp,patch.object(story_feed,'ROOT',Path(tmp)),patch.object(story_feed,'_last_fetch',0),patch('urllib.request.urlopen',side_effect=OSError('offline')):
+  with tempfile.TemporaryDirectory() as tmp,patch.object(story_feed,'ROOT',Path(tmp)),patch.object(story_feed,'_last_fetch',None),patch('urllib.request.urlopen',side_effect=OSError('offline')):
    self.assertGreater(len(story_feed.plans(refresh=True)),0)
  def test_language_gate_cannot_be_bypassed_by_publication_flag(self):
   p=story_feed.plans()[0]
@@ -69,6 +69,6 @@ class SchedulingTests(unittest.TestCase):
   with store.database() as c:
    c.execute("UPDATE jobs SET status='upload_unknown' WHERE id=?",(jid,))
   api=MagicMock();api.videos.return_value.list.return_value.execute.return_value={'items':[{'status':{'privacyStatus':'public'}}]}
-  with patch('youtube.client',return_value=api),patch.object(engine,'_last_reconcile',0):engine.reconcile_known_uploads()
+  with patch('youtube.client',return_value=api),patch.object(engine,'_last_reconcile',None):engine.reconcile_known_uploads()
   with store.database() as c:row=c.execute('SELECT status,youtube_id FROM jobs').fetchone()
   self.assertEqual(tuple(row),('published','remote123'))

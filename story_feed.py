@@ -4,7 +4,7 @@ from pathlib import Path
 from store import ROOT
 URL='https://raw.githubusercontent.com/ayushv1610-del/price-of-everything-shorts/content/story_feed.json'
 LOG=logging.getLogger('shorts.feed')
-_last_fetch=0.
+_last_fetch=None
 
 def validate(items):
     if not isinstance(items,list) or len(items)>90:raise ValueError('Expected at most 90 stories')
@@ -36,7 +36,7 @@ def validate(items):
 def plans(refresh=False):
     global _last_fetch
     cache=ROOT/'story-feed.json'
-    if refresh and time.monotonic()-_last_fetch>=600:
+    if refresh and (_last_fetch is None or time.monotonic()-_last_fetch>=600):
         _last_fetch=time.monotonic()
         try:
             with urllib.request.urlopen(URL,timeout=10) as r:data=r.read(250001)

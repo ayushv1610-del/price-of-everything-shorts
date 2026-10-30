@@ -133,10 +133,10 @@ def remember_upload(jid,vid):
         c.execute('UPDATE jobs SET youtube_id=?,updated=? WHERE id=?',(vid,time.time(),jid))
         event(c,jid,'remote_id_recorded',vid)
 
-_last_reconcile=0.
+_last_reconcile=None
 def reconcile_known_uploads():
     global _last_reconcile
-    if time.monotonic()-_last_reconcile<300:return
+    if _last_reconcile is not None and time.monotonic()-_last_reconcile<300:return
     _last_reconcile=time.monotonic()
     with database() as c:
         rows=c.execute("SELECT id,youtube_id FROM jobs WHERE status IN ('upload_unknown','uploaded_not_public') AND youtube_id IS NOT NULL").fetchall()
