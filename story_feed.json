@@ -250,5 +250,185 @@
         "setting": "rain"
       }
     ]
+  },
+  {
+    "id": "hi-20261030-rain-rhythm",
+    "title": "बारिश में किसकी ताल? ☔ #Shorts",
+    "scenes": [
+      {
+        "speaker": "tara",
+        "narration": "सुनो! छाते पर कोई ढोल बजा रहा है क्या?",
+        "caption": "छाते पर ढोल?",
+        "setting": "rain"
+      },
+      {
+        "speaker": "golu",
+        "narration": "ऊपर कोई नहीं है। बस बारिश की बूँदें हैं!",
+        "caption": "बूँदों की आवाज़",
+        "setting": "rain"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "छोटी बूँद टिक करती है, बड़ी बूँद टप करती है!",
+        "caption": "टिक या टप?",
+        "setting": "rain"
+      },
+      {
+        "speaker": "tara",
+        "narration": "तो हम बिना ढोल के भी बारिश वाला गाना गा सकते हैं!",
+        "caption": "बारिश का गाना",
+        "setting": "rain"
+      },
+      {
+        "speaker": "golu",
+        "narration": "टिक टप, टिक टप! अरे, मेरी सूँड़ पर भी एक टप!",
+        "caption": "सूँड़ पर टप!",
+        "setting": "rain"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261030-drum-turns",
+    "title": "मिट्ठू का अधूरा गाना! 🥁 #Shorts",
+    "scenes": [
+      {
+        "speaker": "mithu",
+        "narration": "मेरा गाना हर बार बीच में गायब क्यों हो जाता है?",
+        "caption": "गाना कहाँ गया?",
+        "setting": "drum"
+      },
+      {
+        "speaker": "tara",
+        "narration": "गोलू, तुम साथ में ढोल बजाते हो, तो मिट्ठू सुनाई नहीं देता!",
+        "caption": "ढोल ज़्यादा तेज़!",
+        "setting": "drum"
+      },
+      {
+        "speaker": "golu",
+        "narration": "अच्छा! पहले मिट्ठू गाएगा, फिर मैं ताल बजाऊँगा।",
+        "caption": "बारी बारी संगीत",
+        "setting": "drum"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "ला ला ला! अब तुम्हारी बारी, गोलू!",
+        "caption": "अब गोलू की बारी",
+        "setting": "drum"
+      },
+      {
+        "speaker": "tara",
+        "narration": "वाह! दोनों का गाना सुन लिया। अब मेरी ताली की बारी!",
+        "caption": "सबकी अपनी बारी",
+        "setting": "drum"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261030-mango-truth",
+    "title": "आम का छोटा सा राज़! 🥭 #Shorts",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "यह गुठली किसकी है? यहाँ तो कोई आम नहीं खा रहा था!",
+        "caption": "गुठली किसकी?",
+        "setting": "mango"
+      },
+      {
+        "speaker": "tara",
+        "narration": "मिट्ठू की चोंच पर पीला निशान देखो!",
+        "caption": "पीला सुराग",
+        "setting": "mango"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "मैंने आम खाया था। तुम दोनों के लिए बचाना भूल गया।",
+        "caption": "मिट्ठू ने सच बताया",
+        "setting": "mango"
+      },
+      {
+        "speaker": "golu",
+        "narration": "सच बताने के लिए धन्यवाद। चलो, इसकी गुठली बो देते हैं।",
+        "caption": "मिलकर गुठली बोई",
+        "setting": "mango"
+      },
+      {
+        "speaker": "tara",
+        "narration": "अगली बार आम बाँटेंगे। अभी पानी देने की बारी बाँट लेते हैं!",
+        "caption": "काम भी बाँटेंगे",
+        "setting": "mango"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261030-ball-patience",
+    "title": "गेंद को पहले बोलने दो! ⚽ #Shorts",
+    "scenes": [
+      {
+        "speaker": "tara",
+        "narration": "मेरी गेंद नीचे क्यों नहीं आती? क्या उसे पेड़ पसंद आ गया?",
+        "caption": "गेंद की छुट्टी?",
+        "setting": "ball"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "गेंद कुछ नहीं कह रही। वह इस डाल पर अटकी है!",
+        "caption": "डाल पर अटकी",
+        "setting": "ball"
+      },
+      {
+        "speaker": "golu",
+        "narration": "हम एक साथ बोल रहे हैं। पहले तारा की योजना सुनें।",
+        "caption": "पहले बात सुनो",
+        "setting": "ball"
+      },
+      {
+        "speaker": "tara",
+        "narration": "मैं गेंद नीचे करती हूँ। गोलू, तैयार रहना!",
+        "caption": "पकड़ने के लिए तैयार",
+        "setting": "ball"
+      },
+      {
+        "speaker": "golu",
+        "narration": "पकड़ ली! अब गेंद की बारी है। अरे, यह तो बोलती ही नहीं!",
+        "caption": "गेंद ने उछलकर जवाब दिया",
+        "setting": "ball"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261030-kite-small-help",
+    "title": "सबसे छोटा मददगार! 🪁 #Shorts",
+    "scenes": [
+      {
+        "speaker": "mithu",
+        "narration": "तुम दोनों इतने बड़े हो, फिर पतंग अभी तक क्यों फँसी है?",
+        "caption": "पतंग अभी भी फँसी!",
+        "setting": "kite"
+      },
+      {
+        "speaker": "golu",
+        "narration": "मैं डाल तक पहुँच सकता हूँ, पर डोर की गाँठ दिख नहीं रही।",
+        "caption": "गाँठ कहाँ है?",
+        "setting": "kite"
+      },
+      {
+        "speaker": "tara",
+        "narration": "मिट्ठू, तुम ऊपर से देख सकते हो। हमें सही जगह बताओ!",
+        "caption": "मिट्ठू की नज़र",
+        "setting": "kite"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "थोड़ा बाईं ओर! हाँ, वहीं डोर उलझी है। अब खुल गई!",
+        "caption": "मिलकर डोर छुड़ाई",
+        "setting": "kite"
+      },
+      {
+        "speaker": "golu",
+        "narration": "सबसे छोटे दोस्त ने बड़ी मदद की! पतंग से पहले तुम्हें सलाम!",
+        "caption": "छोटा दोस्त, बड़ी मदद",
+        "setting": "kite"
+      }
+    ]
   }
 ]
