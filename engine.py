@@ -80,6 +80,7 @@ def publish_next():
         rows=c.execute("SELECT * FROM jobs WHERE status='ready' AND youtube_id IS NULL ORDER BY created").fetchall()
         row=next((r for r in rows if json.loads(r['plan']).get('visual_style')=='cartoon'
                   and json.loads(r['plan']).get('publication_ready')
+                  and not json.loads(r['plan']).get('language_review_required')
                   and json.loads(r['qa'] or '{}').get('dialogue_validated')),None)
         if row is None:return False
         plan=json.loads(row['plan']);qa=json.loads(row['qa'])
@@ -105,3 +106,15 @@ def worker():
         try:worked=tick()
         except Exception:LOG.exception('Worker tick failed');worked=False
         STOP.wait(2 if worked else 15)
+
+
+def catalog_status():
+    if os.environ.get('SHORTS_CONTENT_MODE')=='cartoon':
+        from cartoon_stories import STORIES,plan_for_story
+        entries=[('story:'+item[0],plan_for_story(item)) for item in STORIES]
+    else:entries=[('topic:'+item['slug'],plan_for(item)) for item in CATALOG]
+    with database() as c:used={row[0] for row in c.execute('SELECT key FROM jobs')}
+    pending=[plan for key,plan in entries if key not in used]
+    return {'total':len(entries),'remaining':len(pending),
+            'remaining_publishable':sum(bool(p.get('publication_ready')) and not p.get('language_review_required',False) for p in pending),
+            'next_topic':pending[0]['topic'] if pending else None}

@@ -85,7 +85,7 @@ def drafts():
 @app.get('/api/status',dependencies=[Depends(require_admin)])
 def status():
     with database() as c:counts={r[0]:r[1] for r in c.execute('SELECT status,count(*) FROM jobs GROUP BY status')}
-    return {'jobs':counts,'daily_enabled':setting('daily_enabled',True),'youtube_connected':(ROOT/'google-token.json').exists(),'google_configured':bool(os.environ.get('GOOGLE_CLIENT_ID') and os.environ.get('GOOGLE_CLIENT_SECRET')),'channel':setting('youtube_channel'),'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1','free_mb':round(shutil.disk_usage(ROOT).free/1024**2),'catalog_size':len(engine.CATALOG),'content_mode':os.environ.get('SHORTS_CONTENT_MODE','explainers'),'auto_publish':os.environ.get('SHORTS_AUTO_PUBLISH')=='1','schedule_timezone':'Asia/Kolkata','schedule_hour':9}
+    return {'jobs':counts,'daily_enabled':setting('daily_enabled',True),'youtube_connected':(ROOT/'google-token.json').exists(),'google_configured':bool(os.environ.get('GOOGLE_CLIENT_ID') and os.environ.get('GOOGLE_CLIENT_SECRET')),'channel':setting('youtube_channel'),'publishing_enabled':os.environ.get('SHORTS_PUBLIC_PUBLISHING_ENABLED')=='1','free_mb':round(shutil.disk_usage(ROOT).free/1024**2),'catalog_size':engine.catalog_status()['total'],'catalog':engine.catalog_status(),'content_mode':os.environ.get('SHORTS_CONTENT_MODE','explainers'),'auto_publish':os.environ.get('SHORTS_AUTO_PUBLISH')=='1','schedule_timezone':'Asia/Kolkata','schedule_hour':9}
 @app.get('/api/jobs',dependencies=[Depends(require_admin)])
 def jobs():
     with database() as c:
@@ -100,7 +100,7 @@ def produce():
     return {'id':jid,'created':new}
 class Schedule(BaseModel):enabled:bool
 @app.post('/api/schedule',dependencies=[Depends(require_admin)])
-def schedule(body:Schedule):set_setting('daily_enabled',body.enabled);return {'enabled':body.enabled,'interval':'one new curated topic per UTC day'}
+def schedule(body:Schedule):set_setting('daily_enabled',body.enabled);return {'enabled':body.enabled,'interval':'one new curated story daily at 09:00 Asia/Kolkata'}
 
 def get_job(jid):
     with database() as c:r=c.execute('SELECT * FROM jobs WHERE id=?',(jid,)).fetchone()
@@ -181,7 +181,7 @@ def publish(jid:str,body:PublicUpload):
         return {'youtube_id':row['youtube_id'],'status':row['status']}
     plan=json.loads(row['plan'])
     # Render QA alone does not establish editorial quality. Existing demos are excluded.
-    if not plan.get('publication_ready') or plan.get('topic') in {
+    if plan.get('language_review_required') or not plan.get('publication_ready') or plan.get('topic') in {
         'inflation','compounding','basket','hotel-comparison-pilot','cartoon-icecream'}:
         raise HTTPException(409,'Prototype excluded from public publishing')
     if row['status']!='ready' or not row['qa']:
@@ -255,3 +255,11 @@ def job_status(jid:str):
     row=get_job(jid)
     return {'id':jid,'status':row['status'],'attempts':row['attempts'],'error':row['error'],
             'youtube_id':row['youtube_id'],'qa':json.loads(row['qa']) if row['qa'] else None}
+
+
+@app.get('/api/jobs/production-status',dependencies=[Depends(require_admin)])
+def production_status():
+    # Restricted operator can inspect queue and bank without reading credentials.
+    with database() as c:
+        rows=c.execute('SELECT id,key,status,youtube_id,qa FROM jobs ORDER BY created').fetchall()
+    return {'catalog':engine.catalog_status(),'jobs':[dict(row) for row in rows]}

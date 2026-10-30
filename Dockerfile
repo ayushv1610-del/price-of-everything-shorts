@@ -1,5 +1,5 @@
 FROM python:3.12-slim
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core fonts-noto-core libraqm0 && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY requirements.txt requirements-voice.txt ./
 RUN pip install --no-cache-dir -r requirements-voice.txt

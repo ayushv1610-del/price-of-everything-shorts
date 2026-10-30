@@ -52,7 +52,10 @@ def render(plan,folder):
     render_frame=frame
     voice_checks=[]
     if plan.get('visual_style')=='cartoon':
-        from cartoon_pilot import frame as cartoon_frame
+        if plan.get('cast')=='jungle-friends':
+            from jungle_cartoon import frame as cartoon_frame
+        else:
+            from cartoon_pilot import frame as cartoon_frame
         render_frame=cartoon_frame
         if plan.get('voice_engine')!='kokoro':raise ValueError('Cartoons require character dialogue')
     for i,s in enumerate(plan['scenes']):
@@ -61,7 +64,7 @@ def render(plan,folder):
         # Text file avoids passing narration as filter syntax or shell input.
         if plan.get('voice_engine')=='kokoro':
             from kokoro_voice import synthesize
-            voice_checks.append(synthesize(s['narration'],s['speaker'],wav))
+            voice_checks.append(synthesize(s['narration'],s['speaker'],wav,language=plan.get('language','en')))
         else:
             run(['ffmpeg','-v','error','-y','-f','lavfi','-i',f'flite=textfile={text}:voice=slt','-ar','48000',str(wav)])
         length=float(probe(wav)['format']['duration'])+.3
@@ -98,14 +101,24 @@ def render(plan,folder):
     if (vs['width'],vs['height'])!=(W,H) or audio['codec_name']!='aac':raise ValueError('Invalid output streams')
     # Decode every frame to catch corruption before making the asset available.
     run(['ffmpeg','-v','error','-i',str(temp),'-f','null','-'])
+    # Recheck the encoded track, not only the source WAVs: every dialogue interval must survive muxing.
+    import numpy as np
+    pcm=run(['ffmpeg','-v','error','-i',str(temp),'-vn','-ac','1','-ar','16000','-f','s16le','pipe:1'])
+    decoded=np.frombuffer(pcm,dtype='<i2').astype(float)/32768
+    encoded_levels=[];offset=0.
+    for duration in durations:
+        segment=decoded[round(offset*16000):round((offset+duration)*16000)]
+        rms=float(np.sqrt(np.mean(segment*segment))) if len(segment) else 0.
+        if rms<.003:raise ValueError('Encoded dialogue is missing or silent')
+        encoded_levels.append(round(rms,5));offset+=duration
     temp.replace(video)
     render_frame(plan['scenes'][0],0,len(plan['scenes']),.7).save(folder/'thumbnail.jpg')
     (folder/'captions.srt').write_text('\n'.join(subs))
     description='\n'.join([plan['title'],'','Sources:']+[s['url'] for s in plan['sources']]+['','Original fictional cartoon with synthetic character voices. #Shorts' if plan.get('fictional') else 'Original animation and synthetic narration. Educational explainer. #Shorts'])
-    metadata=dict(title=plan['title'],description=description,tags=['Shorts','economics','The Price of Everything'],privacyStatus='private')
+    metadata=dict(defaultLanguage=plan.get('language','en'),title=plan['title'],description=description,tags=['Shorts','economics','The Price of Everything'],privacyStatus='private')
     (folder/'metadata.json').write_text(json.dumps(metadata,indent=2))
     (folder/'plan.json').write_text(json.dumps(plan,indent=2))
-    qa=dict(width=W,height=H,fps=FPS,duration=round(float(info['format']['duration']),3),audio=True,codec=vs['codec_name'],sha256=sha(video),bytes=video.stat().st_size,full_decode=True,voice=plan.get('voice_engine','flite-slt-offline'),dialogue_validated=bool(voice_checks) and len(voice_checks)==len(plan['scenes']),voice_lines=len(voice_checks))
+    qa=dict(width=W,height=H,fps=FPS,duration=round(float(info['format']['duration']),3),audio=True,codec=vs['codec_name'],sha256=sha(video),bytes=video.stat().st_size,full_decode=True,voice=plan.get('voice_engine','flite-slt-offline'),dialogue_validated=bool(voice_checks) and len(voice_checks)==len(plan['scenes']),voice_lines=len(voice_checks),language=plan.get('language','en'),language_review_required=bool(plan.get('language_review_required')),encoded_audio_rms=encoded_levels)
     (folder/'qa.json').write_text(json.dumps(qa,indent=2))
     for p in parts:p.unlink()
     for pattern in ('voice-*.wav','speech-*.txt'):

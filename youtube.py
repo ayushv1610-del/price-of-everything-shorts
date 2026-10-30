@@ -1,4 +1,4 @@
-"""OAuth and private uploads only. No public publishing API exists."""
+"""Channel-bound OAuth uploads with remote visibility verification."""
 import os, json, time, secrets
 from pathlib import Path
 from store import database, ROOT, event
@@ -73,7 +73,7 @@ def upload_public(folder, made_for_kids):
     metadata=json.loads((folder/'metadata.json').read_text())
     request=client().videos().insert(part='snippet,status',notifySubscribers=False,
         body={'snippet':{'title':metadata['title'],'description':metadata['description'],
-                        'tags':metadata['tags'],'categoryId':'24'},
+                        'tags':metadata['tags'],'categoryId':'24','defaultLanguage':metadata.get('defaultLanguage','en'),'defaultAudioLanguage':metadata.get('defaultLanguage','en')},
               'status':{'privacyStatus':'public','selfDeclaredMadeForKids':made_for_kids}},
         media_body=MediaFileUpload(str(folder/'video.mp4'),mimetype='video/mp4',
                                   chunksize=4*1024*1024,resumable=True))

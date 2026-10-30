@@ -54,3 +54,18 @@ The Docker build installs `requirements-voice.txt`, downloads pinned Kokoro rele
 `SHORTS_AUTO_PUBLISH=1` enables the worker's public-upload step only for reviewed cartoon plans whose QA reports validated dialogue and whose current video hash matches the validated hash. Google authorization, the confirmed `YOUTUBE_CHANNEL_ID`, and correct per-plan audience settings are required. Old prototypes and the silent imported test do not qualify for this automatic worker. Ambiguous upload outcomes are held for reconciliation and never automatically uploaded again.
 
 Run `python -m unittest -v test_dialogue test_production test_system` for automated coverage. A real local queue-render integration test produced a 15.592-second cartoon with all five Kokoro lines validated. Deployed behavior must be independently verified after each release.
+
+
+### Hindi jungle episodes
+The story bank now begins with two original Hindi scripts starring Golu (elephant),
+Tara (monkey), and Mithu (parrot). They use Hindi Kokoro voices and the `hi`
+phonemizer, plus Noto Sans Devanagari and RAQM shaping. They are deliberately
+marked `language_review_required` and `publication_ready=False`: waveform and
+codec tests cannot establish fluent, natural pronunciation. Neither the worker
+nor the explicit public endpoint publishes these held episodes. This is a
+quality hold, not a request for another routine publishing approval.
+
+The renderer checks every encoded dialogue interval after muxing. Missing or
+silent dialogue fails the render; no replacement voice or silent fallback is used.
+Production status exposes remaining story count and publishable count, so a finite
+reviewed bank is not mistaken for unlimited autonomous story creation.
