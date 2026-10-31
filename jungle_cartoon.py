@@ -43,6 +43,23 @@ def friend(d,x,y,kind,t,speaking,scale=1,trunk_raise=0):
   if level>.06:ellipse(-12,-3,12,4+level*20,'#5c3144')
   else:d.arc((x-13*scale,y-8*scale,x+13*scale,y+13*scale),0,180,fill='#5c3144',width=3)
  if kind=='golu':line([(15,-18),(49,-1-trunk_raise),(76,-7-trunk_raise),(83,-28-trunk_raise)],color,23)
+def shot_region(speaker,index,total):
+ # Keep action beats wide; use a reaction shot only after the clue is established.
+ if index==2 and total>=5:
+  return {'golu':(0,530,550,1011),'tara':(90,530,640,1011),
+          'mithu':(170,420,720,901)}.get(speaker,(0,390,720,1020))
+ if index==1:return (100,390,720,933)
+ if index==total-1:return (30,430,690,1008)
+ return (0,390,720,1020)
+
+def compose_shot(image,speaker,index,total):
+ # Camera moves affect only the illustration, never captions or the title.
+ region=shot_region(speaker,index,total)
+ if region!=(0,390,720,1020):
+  artwork=image.crop(region).resize((720,630),Image.Resampling.LANCZOS)
+  image.paste(artwork,(0,390))
+ return image
+
 def frame(s,i,total,p):
  t=i+p;ease=p*p*(3-2*p)
  im=Image.new('RGB',(720,1280),'#d3f2ed');d=ImageDraw.Draw(im)
@@ -101,6 +118,7 @@ def frame(s,i,total,p):
  friend(d,626,660+math.sin(t*2+1)*3,'mithu',t+.6,speaker=='mithu',.65)
  if setting=='drum' and i<=2:d.line((649,683,669,650-8*math.sin(p*math.pi*4)),fill='#986441',width=6)
  if setting=='mango' and i>=1:d.ellipse((630,660,642,668),fill='#ffc02f')
+ im=compose_shot(im,speaker,i,total);d=ImageDraw.Draw(im)
  text_panel(d,s['caption'],(35,230,685,370),36,'#343951','#fffdf1')
  text_panel(d,s['narration'],(30,1040,690,1235),29,'#fffdf1','#313e59')
  d.text((35,65),'गोलू • तारा • मिट्ठू',font=font(31),fill='#313e59',language='hi')
