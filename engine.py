@@ -190,6 +190,9 @@ def worker():
             reconcile_known_uploads()
             prune_old_assets()
             worked=tick()
+            if not worked:
+                import performance
+                performance.refresh()
         except Exception:LOG.exception('Worker tick failed');worked=False
         STOP.wait(2 if worked else 15)
 

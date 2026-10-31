@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from store import database, ROOT, event, setting, set_setting
 import engine
+import performance
 from renderer import sha
 TOKEN=os.environ.get('SHORTS_ADMIN_TOKEN','')
 @asynccontextmanager
@@ -62,7 +63,8 @@ def health():
             'daily_enabled':setting('daily_enabled',True),
             'last_scheduled_date':setting('last_scheduled_v2'),
             'last_publication':dict(latest) if latest else None,'queue':counts,
-            'stories_remaining':engine.catalog_status()['remaining']}
+            'stories_remaining':engine.catalog_status()['remaining'],
+            'performance':performance.summary()}
 @app.get('/ready')
 def ready():
     try:
