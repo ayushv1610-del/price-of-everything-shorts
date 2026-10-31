@@ -430,5 +430,509 @@
         "setting": "kite"
       }
     ]
+  },
+  {
+    "id": "hi-20261031-rain-map",
+    "title": "बारिश ने बनाया नक्शा! #Shorts",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "अरे, जमीन पर यह चमकता हुआ रास्ता किसने बना दिया?",
+        "caption": "चमकता रास्ता!",
+        "setting": "rain"
+      },
+      {
+        "speaker": "tara",
+        "narration": "यह रास्ता नहीं, पानी है। देखो, बारिश की बूँदें इसमें गिर रही हैं।",
+        "caption": "पानी का छोटा ताल",
+        "setting": "rain"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "मैं इसे जंगल का नक्शा समझ रहा था। इसमें हमारा पेड़ कहाँ है?",
+        "caption": "नक्शा या पानी?",
+        "setting": "rain"
+      },
+      {
+        "speaker": "tara",
+        "narration": "अभी नक्शा मत पढ़ो। बारिश रुकेगी, तो इस पानी को फिर देखेंगे।",
+        "caption": "पहले बारिश रुकने दो",
+        "setting": "rain"
+      },
+      {
+        "speaker": "golu",
+        "narration": "बारिश रुक गई! मेरा नक्शा तो पैरों को गीला करने के काम आया!",
+        "caption": "गीले नक्शे की खोज",
+        "setting": "rain"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-drum-secret-silence",
+    "title": "सबसे मुश्किल ताल कौन सी? #Shorts",
+    "scenes": [
+      {
+        "speaker": "mithu",
+        "narration": "आज मैं ऐसी ताल सुनाऊँगा, जिसे गोलू भी नहीं बजा सकता!",
+        "caption": "मिट्ठू की चुनौती",
+        "setting": "drum"
+      },
+      {
+        "speaker": "golu",
+        "narration": "अच्छा! ढोल तो सामने है। सुनाओ, मैं बड़े ध्यान से सुन रहा हूँ।",
+        "caption": "गोलू तैयार है",
+        "setting": "drum"
+      },
+      {
+        "speaker": "tara",
+        "narration": "मिट्ठू, तुम कुछ बोल ही नहीं रहे। क्या अपनी ताल भूल गए?",
+        "caption": "ताल कहाँ है?",
+        "setting": "drum"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "नहीं! यह गाने के बीच वाला ठहराव है। इसमें सब चुप रहते हैं।",
+        "caption": "चुप रहना भी ताल",
+        "setting": "drum"
+      },
+      {
+        "speaker": "golu",
+        "narration": "समझ गया! सबसे मुश्किल ताल वही है, जिसमें मेरी बात भी बंद हो!",
+        "caption": "गोलू की चुप वाली ताल",
+        "setting": "drum"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-mango-name",
+    "title": "गुठली का नाम क्या रखें? #Shorts",
+    "scenes": [
+      {
+        "speaker": "tara",
+        "narration": "यह छोटी गुठली इतनी बड़ी जिम्मेदारी लेकर क्यों बैठी है?",
+        "caption": "छोटी गुठली, बड़ी बात",
+        "setting": "mango"
+      },
+      {
+        "speaker": "golu",
+        "narration": "जिम्मेदारी? मुझे तो बस जमीन पर पड़ी एक गुठली दिख रही है।",
+        "caption": "गोलू को समझ नहीं आया",
+        "setting": "mango"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "हम इसे बोएँगे और इसकी देखभाल करेंगे। इसका नाम रखो, मीठू!",
+        "caption": "नया नाम सुझाया",
+        "setting": "mango"
+      },
+      {
+        "speaker": "tara",
+        "narration": "पहले पानी दें। सिर्फ मीठा नाम रखने से पेड़ पर मीठे आम नहीं लगेंगे।",
+        "caption": "नाम से काम नहीं होगा",
+        "setting": "mango"
+      },
+      {
+        "speaker": "golu",
+        "narration": "तो मेरा नाम भी पानी रख दो! रोज याद रहेगा कि क्या करना है।",
+        "caption": "पानी नाम का हाथी?",
+        "setting": "mango"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-kite-wrong-end",
+    "title": "लाल डोर का दूसरा सिरा! #Shorts",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "यह लाल लकीर पेड़ तक क्यों जा रही है? किसने रास्ता बनाया?",
+        "caption": "लाल लकीर का राज",
+        "setting": "kite"
+      },
+      {
+        "speaker": "tara",
+        "narration": "लकीर नहीं, पतंग की डोर है। उसका दूसरा सिरा ऊपर देखो।",
+        "caption": "ऊपर देखो, गोलू",
+        "setting": "kite"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "मैंने तो नीचे ही नीचे ढूँढ़ा! इसलिए पतंग मिली ही नहीं।",
+        "caption": "गलत तरफ खोज",
+        "setting": "kite"
+      },
+      {
+        "speaker": "golu",
+        "narration": "डाल धीरे झुक रही है। अब डोर को आराम से छुड़ा सकते हैं।",
+        "caption": "धीरे से डोर खुली",
+        "setting": "kite"
+      },
+      {
+        "speaker": "tara",
+        "narration": "मिल गई! अगली बार चीज खोजने से पहले अपनी नजर की दिशा देखना!",
+        "caption": "सही दिशा, सही खोज",
+        "setting": "kite"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-ball-not-fruit",
+    "title": "पेड़ पर नया फल? #Shorts",
+    "scenes": [
+      {
+        "speaker": "mithu",
+        "narration": "रुको! इस पेड़ पर सफेद और काला फल कब से लगने लगा?",
+        "caption": "यह कैसा फल है?",
+        "setting": "ball"
+      },
+      {
+        "speaker": "tara",
+        "narration": "फल नहीं, हमारी गेंद है। नीचे से देखो तो गोल फल जैसी लगती है।",
+        "caption": "गेंद की पहचान",
+        "setting": "ball"
+      },
+      {
+        "speaker": "golu",
+        "narration": "अच्छा हुआ तुमने बता दिया। मैं इसका नाम गेंदफल रखने वाला था।",
+        "caption": "गोलू का नया नाम",
+        "setting": "ball"
+      },
+      {
+        "speaker": "tara",
+        "narration": "अब गेंद नीचे आ रही है। खेल की चीज खेल में ही अच्छी लगती है।",
+        "caption": "गेंद नीचे आई",
+        "setting": "ball"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "हाँ! फल खाया जाता है, गेंद उछाली जाती है। दोनों की छुट्टी अलग है!",
+        "caption": "गेंदफल की छुट्टी खत्म",
+        "setting": "ball"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-rain-counting",
+    "title": "बूँदों की गिनती कहाँ अटकी? #Shorts",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "एक, दो, तीन! अरे, बारिश मेरी गिनती से तेज क्यों चल रही है?",
+        "caption": "गिनती से तेज बारिश",
+        "setting": "rain"
+      },
+      {
+        "speaker": "tara",
+        "narration": "तुम हर बूँद गिनना चाह रहे हो? इतनी बूँदें साथ में गिरती हैं!",
+        "caption": "एक साथ ढेरों बूँदें",
+        "setting": "rain"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "हम तीन दोस्त तो आराम से गिन सकते हैं। गोलू, तारा और मैं!",
+        "caption": "दोस्त गिनना आसान",
+        "setting": "rain"
+      },
+      {
+        "speaker": "golu",
+        "narration": "तो तीन दोस्तों की बारिश वाली कहानी में बूँदों की गिनती जरूरी नहीं?",
+        "caption": "गोलू का सवाल",
+        "setting": "rain"
+      },
+      {
+        "speaker": "tara",
+        "narration": "बिलकुल! बारिश रुक भी गई। तुम गिनते रहते, तो कहानी ही छूट जाती!",
+        "caption": "गिनती छोड़ी, कहानी मिली",
+        "setting": "rain"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-drum-announcer",
+    "title": "गाना शुरू होने से पहले! #Shorts",
+    "scenes": [
+      {
+        "speaker": "tara",
+        "narration": "अरे! हमारा संगीत शुरू होने से पहले ही घोषणा इतनी लंबी क्यों हो गई?",
+        "caption": "लंबी घोषणा का राज",
+        "setting": "drum"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "मैं बता रहा हूँ कि कौन गाएगा, कौन सुनेगा और कौन ताल देगा।",
+        "caption": "मिट्ठू की बड़ी सूची",
+        "setting": "drum"
+      },
+      {
+        "speaker": "golu",
+        "narration": "सबके नाम बताने में ही समय चला गया। मैं अपना नाम फिर भूल गया!",
+        "caption": "गोलू का मजेदार सवाल",
+        "setting": "drum"
+      },
+      {
+        "speaker": "tara",
+        "narration": "बस कहो, तीन दोस्त मिलकर गाएँगे। फिर जिसकी बारी हो, उसे सुनेंगे।",
+        "caption": "छोटी बात, बड़ा संगीत",
+        "setting": "drum"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "तो घोषणा खत्म! अरे, मेरे गाने की बारी भी घोषणा में निकल गई!",
+        "caption": "घोषणा ही गाना बन गई",
+        "setting": "drum"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-mango-stain-pride",
+    "title": "पीला निशान छिपाना क्यों? #Shorts",
+    "scenes": [
+      {
+        "speaker": "mithu",
+        "narration": "अरे! मेरी चोंच पर यह पीला निशान कहाँ से आ गया?",
+        "caption": "चोंच पर पीला निशान",
+        "setting": "mango"
+      },
+      {
+        "speaker": "golu",
+        "narration": "जमीन पर गुठली भी है। कहीं तुमने अभी आम तो नहीं खाया?",
+        "caption": "गुठली भी मिली",
+        "setting": "mango"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "हाँ, खाया था! मैं सोच रहा था, निशान देखकर तुम लोग हँसोगे।",
+        "caption": "मिट्ठू की छोटी चिंता",
+        "setting": "mango"
+      },
+      {
+        "speaker": "tara",
+        "narration": "निशान पर क्यों हँसेंगे? अब यह गुठली बोने में हमारी मदद करो।",
+        "caption": "अब मिलकर काम करें",
+        "setting": "mango"
+      },
+      {
+        "speaker": "golu",
+        "narration": "तुम्हारा पीला निशान बता रहा है कि आज के माली को आम बहुत पसंद हैं!",
+        "caption": "आम पसंद करने वाला माली",
+        "setting": "mango"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-kite-colour-job",
+    "title": "आसमान का लाल निशान! #Shorts",
+    "scenes": [
+      {
+        "speaker": "tara",
+        "narration": "पतंग इतनी लाल क्यों है? गोलू इसे दूर से पहचान भी सकता है!",
+        "caption": "लाल रंग का काम",
+        "setting": "kite"
+      },
+      {
+        "speaker": "golu",
+        "narration": "हाँ! हरे पत्तों के बीच भी मुझे उसका लाल कोना दिख रहा है।",
+        "caption": "पत्तों में लाल कोना",
+        "setting": "kite"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "तो रंग सिर्फ सुंदर दिखने के लिए नहीं? पहचानने में भी मदद करता है!",
+        "caption": "रंग ने दी पहचान",
+        "setting": "kite"
+      },
+      {
+        "speaker": "tara",
+        "narration": "अब डाल नीचे हुई और डोर खुल गई। देखो, पतंग कितनी साफ दिखती है।",
+        "caption": "पतंग फिर चली",
+        "setting": "kite"
+      },
+      {
+        "speaker": "golu",
+        "narration": "अच्छा हुआ पेड़ लाल नहीं था। वरना मैं पूरे पेड़ को पतंग कह देता!",
+        "caption": "पेड़ पतंग नहीं है",
+        "setting": "kite"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-ball-two-guesses",
+    "title": "गेंद सो रही है क्या? #Shorts",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "ऊपर गेंद इतनी चुप क्यों है? क्या खेलते खेलते सो गई?",
+        "caption": "सोती हुई गेंद?",
+        "setting": "ball"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "मुझे लगता है, पेड़ के पास नई मेहमान आई है और आराम कर रही है।",
+        "caption": "मिट्ठू का दूसरा अंदाजा",
+        "setting": "ball"
+      },
+      {
+        "speaker": "tara",
+        "narration": "तुम दोनों कहानी बना रहे हो। देखो, गेंद डाल पर अटकी हुई है।",
+        "caption": "अंदाजा नहीं, ध्यान से देखो",
+        "setting": "ball"
+      },
+      {
+        "speaker": "golu",
+        "narration": "अब नीचे आ रही है! अच्छा, तो हमारी दोनों बातें गलत निकलीं।",
+        "caption": "असली वजह मिली",
+        "setting": "ball"
+      },
+      {
+        "speaker": "tara",
+        "narration": "कोई बात नहीं! गलती से सीख लिया। अब गेंद को सोने की कहानी मत सुनाना!",
+        "caption": "गेंद को खेलना है",
+        "setting": "ball"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-rain-small-big",
+    "title": "छोटी बूँद का बड़ा सवाल! #Shorts",
+    "scenes": [
+      {
+        "speaker": "mithu",
+        "narration": "यह छोटी छोटी बूँदें मिलकर इतना सारा पानी कैसे बना देती हैं?",
+        "caption": "छोटी बूँद, सारा पानी",
+        "setting": "rain"
+      },
+      {
+        "speaker": "tara",
+        "narration": "हर बूँद थोड़ी जगह भरती है। बहुत सारी बूँदें मिलें, तो पानी बढ़ता है।",
+        "caption": "थोड़ा थोड़ा जुड़ता है",
+        "setting": "rain"
+      },
+      {
+        "speaker": "golu",
+        "narration": "जैसे हमारी कहानी! मैं एक बात कहता हूँ, फिर तुम दोनों और जोड़ते हो।",
+        "caption": "गोलू को उदाहरण मिला",
+        "setting": "rain"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "हाँ! मेरी छोटी सी बात भी कहानी में काम आती है, है ना?",
+        "caption": "छोटी बात भी जरूरी",
+        "setting": "rain"
+      },
+      {
+        "speaker": "tara",
+        "narration": "जरूर! अब बारिश थमी। देखो, छोटे सवाल से पूरी कहानी तैयार हो गई!",
+        "caption": "छोटा सवाल, पूरी कहानी",
+        "setting": "rain"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-drum-listener",
+    "title": "ढोल से ज्यादा जरूरी कौन? #Shorts",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "अगर जंगल में सिर्फ ढोल हो और कोई सुनने वाला न हो, तो मजा आएगा?",
+        "caption": "कौन सुनेगा संगीत?",
+        "setting": "drum"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "मैं सुनूँगा! पर फिर मेरा गाना सुनने के लिए कौन रुकेगा?",
+        "caption": "मिट्ठू की उलझन",
+        "setting": "drum"
+      },
+      {
+        "speaker": "tara",
+        "narration": "हम बारी से गा भी सकते हैं और सुन भी सकते हैं। दोनों काम जरूरी हैं।",
+        "caption": "गाना और सुनना",
+        "setting": "drum"
+      },
+      {
+        "speaker": "golu",
+        "narration": "तो आज मेरी पहली बारी सुनने की है। मिट्ठू, अपनी पूरी बात कहो।",
+        "caption": "गोलू ध्यान से सुन रहा",
+        "setting": "drum"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "वाह! आज पहली बार मेरी लंबी बात के बीच किसी ने अपनी लंबी बात नहीं रखी!",
+        "caption": "बात पूरी होने का मजा",
+        "setting": "drum"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-mango-future-letter",
+    "title": "गुठली को संदेश कौन देगा? #Shorts",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "इस गुठली को कैसे पता चलेगा कि हम इसका ध्यान रखने वाले हैं?",
+        "caption": "गुठली का संदेश",
+        "setting": "mango"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "क्या रोज इसे बताना होगा कि बड़ा पेड़ बनना, पर जल्दी मत करना?",
+        "caption": "मिट्ठू की सलाह",
+        "setting": "mango"
+      },
+      {
+        "speaker": "tara",
+        "narration": "बातों से ज्यादा देखभाल काम आएगी। आज इसे बोते हैं और थोड़ा पानी देते हैं।",
+        "caption": "देखभाल वाला संदेश",
+        "setting": "mango"
+      },
+      {
+        "speaker": "golu",
+        "narration": "तो पानी देना ही हमारा संदेश है? मैं यह काम याद रखूँगा।",
+        "caption": "काम से बात कहेंगे",
+        "setting": "mango"
+      },
+      {
+        "speaker": "tara",
+        "narration": "हाँ! गुठली को लंबा भाषण नहीं चाहिए। वरना मिट्ठू का भाषण खत्म ही नहीं होगा!",
+        "caption": "भाषण छोटा, देखभाल पूरी",
+        "setting": "mango"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261031-ball-rest-place",
+    "title": "डाल की कुर्सी किसने ली? #Shorts",
+    "scenes": [
+      {
+        "speaker": "tara",
+        "narration": "अरे! पेड़ की डाल पर यह गोल मेहमान बिना पूछे कैसे बैठ गया?",
+        "caption": "डाल पर गोल मेहमान",
+        "setting": "ball"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "मेरे पास वाली डाल पर हमारी गेंद है। लगता है, उसे ऊँची जगह पसंद है।",
+        "caption": "मिट्ठू ने गेंद देखी",
+        "setting": "ball"
+      },
+      {
+        "speaker": "golu",
+        "narration": "गेंद का घर तो खेल का मैदान है। डाल की कुर्सी किसकी है?",
+        "caption": "कुर्सी का सवाल",
+        "setting": "ball"
+      },
+      {
+        "speaker": "tara",
+        "narration": "कुर्सी नहीं है, गोलू! अब गेंद नीचे आ रही है। उसे अपना खेल वापस मिला।",
+        "caption": "गेंद वापस नीचे",
+        "setting": "ball"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "अच्छा! मैं डाल पर बैठता हूँ और गेंद जमीन पर उछलती है। सबकी जगह अलग!",
+        "caption": "सबकी अपनी जगह",
+        "setting": "ball"
+      }
+    ]
   }
 ]
