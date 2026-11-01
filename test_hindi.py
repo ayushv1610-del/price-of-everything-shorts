@@ -27,3 +27,28 @@ class HindiTests(unittest.TestCase):
     run.assert_not_called()
 if __name__=='__main__':unittest.main()
 
+
+class ActingTests(unittest.TestCase):
+ def test_pupils_stay_inside_eyes_for_distant_targets(self):
+  from jungle_cartoon import gaze_offset
+  import math
+  for target in [None,(0,0),(1e10,-1e10),(-1e10,1e10),(626,635)]:
+   x,y=gaze_offset(150,776,target)
+   self.assertTrue(math.isfinite(x) and math.isfinite(y))
+   self.assertLessEqual(abs(x),4);self.assertLessEqual(abs(y),3)
+ def test_listener_mouth_does_not_follow_another_voice(self):
+  from PIL import Image,ImageDraw,ImageChops
+  import renderer,jungle_cartoon as j
+  images=[]
+  for level in [0,1]:
+   with patch.object(renderer,'SPEECH_LEVEL',level,create=True):
+    im=Image.new('RGB',(250,300),'white');j.friend(ImageDraw.Draw(im),120,130,'tara',0,False,target=(200,100));images.append(im)
+  self.assertIsNone(ImageChops.difference(*images).getbbox())
+ def test_speaker_gestures_respond_to_own_speech(self):
+  from PIL import Image,ImageDraw,ImageChops
+  import renderer,jungle_cartoon as j
+  images=[]
+  for level in [0,1]:
+   with patch.object(renderer,'SPEECH_LEVEL',level,create=True):
+    im=Image.new('RGB',(250,300),'white');j.friend(ImageDraw.Draw(im),120,130,'tara',0,True);images.append(im)
+  self.assertIsNotNone(ImageChops.difference(*images).getbbox())

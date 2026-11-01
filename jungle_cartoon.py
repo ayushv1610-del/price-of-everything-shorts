@@ -12,14 +12,22 @@ def text_panel(d,text,box,size,color,bg):
  if len(ls)*(size+15)>box[3]-box[1]-20:raise ValueError('Hindi caption would overflow safe area')
  d.rounded_rectangle(box,radius=24,fill=bg)
  for n,line in enumerate(ls):d.text((box[0]+22,box[1]+14+n*(size+15)),line,font=f,fill=color,language='hi')
-def friend(d,x,y,kind,t,speaking,scale=1,trunk_raise=0):
+def gaze_offset(x,y,target):
+ if target is None:return (0.,0.)
+ dx,dy=target[0]-x,target[1]-y
+ distance=max(1.,math.hypot(dx,dy))
+ return (4*dx/distance,3*dy/distance)
+
+def friend(d,x,y,kind,t,speaking,scale=1,trunk_raise=0,target=None,curious=False):
+ level=max(0.,min(1.,getattr(renderer,'SPEECH_LEVEL',0))) if speaking else 0.
+ gaze_x,gaze_y=gaze_offset(x,y-39*scale,target)
  color={'golu':'#91b9d9','tara':'#bd784f','mithu':'#67bd77'}[kind]
  def ellipse(a,b,c,e,fill):d.ellipse((x+a*scale,y+b*scale,x+c*scale,y+e*scale),fill=fill)
  def line(points,fill,width):d.line([(x+a*scale,y+b*scale) for a,b in points],fill=fill,width=max(2,int(width*scale)),joint='curve')
  # Each character has a stable silhouette; slow continuous sway avoids scene resets.
  for side in (-1,1):
-  line([(side*25,68),(side*35+4*math.sin(t*3+side),125)],color,24)
-  line([(side*38,20),(side*65,45+8*math.sin(t*2+side))],color,17)
+  line([(side*25,68),(side*35,125)],color,24)
+  line([(side*38,20),(side*65,45+2*math.sin(t*2+side)-level*22)],color,17)
  ellipse(-45,-5,45,90,color)
  if kind=='golu':
   ellipse(-88,-74,-25,15,color);ellipse(25,-74,88,15,color)
@@ -35,8 +43,9 @@ def friend(d,x,y,kind,t,speaking,scale=1,trunk_raise=0):
  for a in (-22,22):
   ellipse(a-12,-54,a+12,-25,'white')
   if math.sin(t*1.8)>.995:line([(a-8,-38),(a+8,-38)],'#253451',3)
-  else:ellipse(a-5,-46,a+5,-30,'#253451')
- level=getattr(renderer,'SPEECH_LEVEL',0) if speaking else 0
+  else:ellipse(a-5+gaze_x,-46+gaze_y,a+5+gaze_x,-30+gaze_y,'#253451')
+  brow_raise=6 if curious and a<0 else 0
+  line([(a-11,-61-brow_raise),(a,-65-brow_raise),(a+10,-61-brow_raise)],'#253451',2)
  if kind=='mithu':
   d.polygon([(x-13*scale,y-15*scale),(x+31*scale,y-6*scale),(x-8*scale,y+(9+level*15)*scale)],fill='#ffb543')
  else:
@@ -111,11 +120,16 @@ def frame(s,i,total,p):
   d.line((310,610,310,795),fill='#795649',width=6)
   d.pieslice((155,505,465,715),180,360,fill='#e47c92',outline='#a84e71',width=3)
  speaker=s.get('speaker')
- friend(d,150,820+math.sin(t*2)*4,'golu',t,speaker=='golu',1.12,trunk_raise=70*math.sin(p*math.pi) if i==3 else 0)
- friend(d,365,866+math.sin(t*2+.8)*3,'tara',t+.3,speaker=='tara',.9)
+ positions={'golu':(150,776),'tara':(365,831),'mithu':(626,635)}
+ clue=(402,515) if setting in ('kite','ball') else (310,900)
+ curious='?' in s.get('narration','') or '?' in s.get('caption','')
+ def attention(kind):
+  return clue if i<3 and kind==speaker else positions.get(speaker)
+ friend(d,150,820+math.sin(t*2)*4,'golu',t,speaker=='golu',1.12,trunk_raise=70*math.sin(p*math.pi) if i==3 else 0,target=attention('golu'),curious=curious)
+ friend(d,365,866+math.sin(t*2+.8)*3,'tara',t+.3,speaker=='tara',.9,target=attention('tara'),curious=curious)
  # Bird on a low branch, within frame throughout the mystery.
  d.line((575,725,695,725),fill='#986441',width=14)
- friend(d,626,660+math.sin(t*2+1)*3,'mithu',t+.6,speaker=='mithu',.65)
+ friend(d,626,660+math.sin(t*2+1)*3,'mithu',t+.6,speaker=='mithu',.65,target=attention('mithu'),curious=curious)
  if setting=='drum' and i<=2:d.line((649,683,669,650-8*math.sin(p*math.pi*4)),fill='#986441',width=6)
  if setting=='mango' and i>=1:d.ellipse((630,660,642,668),fill='#ffc02f')
  im=compose_shot(im,speaker,i,total);d=ImageDraw.Draw(im)
