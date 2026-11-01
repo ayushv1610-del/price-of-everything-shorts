@@ -934,5 +934,221 @@
         "setting": "ball"
       }
     ]
+  },
+  {
+    "id": "hi-20261101-drum-wooden-secret",
+    "title": "मिट्ठू के पास दूसरी चोंच? #Shorts",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "मिट्ठू, तुम्हारे पास यह दूसरी लंबी चोंच कहाँ से आ गई?",
+        "caption": "दूसरी चोंच?",
+        "setting": "drum"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "दूसरी चोंच नहीं! मेरे पंख के पास ढोल बजाने की छोटी लकड़ी है।",
+        "caption": "लकड़ी का सुराग",
+        "setting": "drum"
+      },
+      {
+        "speaker": "tara",
+        "narration": "गोलू, हर लंबी चीज किसी का अंग नहीं होती। पहले ध्यान से देखो।",
+        "caption": "ध्यान से देखो",
+        "setting": "drum"
+      },
+      {
+        "speaker": "golu",
+        "narration": "अच्छा! मैंने तो सोचा, अब मिट्ठू एक साथ दो बातें कर पाएगा।",
+        "caption": "दो बातें एक साथ?",
+        "setting": "drum"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "एक चोंच से ही इतनी बातें करता हूँ। दूसरी होती, तो तुम कब बोलते?",
+        "caption": "सबको बोलने का मौका",
+        "setting": "drum"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261101-rain-last-drop",
+    "title": "बारिश खत्म, पानी बाकी! #Shorts",
+    "scenes": [
+      {
+        "speaker": "tara",
+        "narration": "बारिश की आवाज बंद हो गई, फिर जमीन अभी तक नीली क्यों है?",
+        "caption": "नीला हिस्सा बाकी",
+        "setting": "rain"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "बूँदें रुक गई हैं, पर नीचे जमा पानी अभी यहीं है। देखो सामने!",
+        "caption": "पानी नीचे जमा है",
+        "setting": "rain"
+      },
+      {
+        "speaker": "golu",
+        "narration": "तो बारिश जाने से अपना सारा पानी साथ नहीं ले जाती? यह तो भूल गई!",
+        "caption": "बारिश कुछ भूल गई?",
+        "setting": "rain"
+      },
+      {
+        "speaker": "tara",
+        "narration": "भूली नहीं! कुछ पानी मिट्टी सोख लेगी और कुछ धीरे धीरे सूख जाएगा।",
+        "caption": "पानी को समय लगेगा",
+        "setting": "rain"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "अच्छा हुआ जमीन ने पानी सँभाल लिया। वरना गोलू उसे वापस बुलाने लगता!",
+        "caption": "बारिश को वापस बुलाएँ?",
+        "setting": "rain"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261101-kite-tail",
+    "title": "पतंग की छोटी पूँछ! #Shorts",
+    "scenes": [
+      {
+        "speaker": "mithu",
+        "narration": "अरे! लाल पतंग के नीचे यह टेढ़ी सी पूँछ किसकी है?",
+        "caption": "पूँछ किसकी है?",
+        "setting": "kite"
+      },
+      {
+        "speaker": "tara",
+        "narration": "यह उसी पतंग का हिस्सा है। देखो, नीचे छोटी सी लहराती पट्टी है।",
+        "caption": "पतंग की अपनी पट्टी",
+        "setting": "kite"
+      },
+      {
+        "speaker": "golu",
+        "narration": "मैं सोच रहा था, कहीं तारा अपनी पूँछ तो ऊपर नहीं भूल गई!",
+        "caption": "तारा की पूँछ ऊपर?",
+        "setting": "kite"
+      },
+      {
+        "speaker": "tara",
+        "narration": "मेरी पूँछ मेरे पास है! अब डाल धीरे झुकी और डोर भी खुल रही है।",
+        "caption": "डोर खुलने लगी",
+        "setting": "kite"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "अब पतंग उड़ेगी और तारा यहीं रहेगी। अच्छा हुआ दोनों की पहचान हो गई!",
+        "caption": "दो पूँछों का राज खुला",
+        "setting": "kite"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261101-ball-patches",
+    "title": "गेंद पर काले टुकड़े! #Shorts",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "हमारी सफेद गेंद पर इतने काले निशान किसने बना दिए?",
+        "caption": "काले निशान का राज",
+        "setting": "ball"
+      },
+      {
+        "speaker": "tara",
+        "narration": "वे गंदगी के निशान नहीं। ये काले हिस्से गेंद की बनावट में ही हैं।",
+        "caption": "गेंद की बनावट",
+        "setting": "ball"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "नीचे से तो मुझे सफेद रंग दिखा था। पास से दोनों रंग साफ दिख रहे हैं!",
+        "caption": "दो रंगों की गेंद",
+        "setting": "ball"
+      },
+      {
+        "speaker": "golu",
+        "narration": "अब नीचे आ रही है। चलो, इसे साफ करने की चिंता छोड़कर खेलते हैं।",
+        "caption": "चिंता छोड़ो, खेलो",
+        "setting": "ball"
+      },
+      {
+        "speaker": "tara",
+        "narration": "हाँ! और हर काले हिस्से को छेद मत समझना। हवा अंदर ही रहेगी!",
+        "caption": "काला हिस्सा छेद नहीं",
+        "setting": "ball"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261101-mango-small-mark",
+    "title": "छोटे निशान की बड़ी खबर! #Shorts",
+    "scenes": [
+      {
+        "speaker": "mithu",
+        "narration": "इतने बड़े जंगल में मेरी चोंच का छोटा निशान सबसे पहले कैसे दिख गया?",
+        "caption": "छोटा निशान दिख गया",
+        "setting": "mango"
+      },
+      {
+        "speaker": "tara",
+        "narration": "तुम बात कर रहे थे, तो हम तुम्हारी ओर देख रहे थे। निशान भी दिख गया।",
+        "caption": "बात करते दोस्त को देखो",
+        "setting": "mango"
+      },
+      {
+        "speaker": "golu",
+        "narration": "और नीचे गुठली थी। दोनों चीजें साथ देखकर आम की बात समझ आई।",
+        "caption": "दो सुराग एक साथ",
+        "setting": "mango"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "अच्छा! अब मैं भी गुठली बोने का काम ध्यान से देखूँगा और सीखूँगा।",
+        "caption": "मिट्ठू सीखने को तैयार",
+        "setting": "mango"
+      },
+      {
+        "speaker": "tara",
+        "narration": "जरूर! बस पानी का ध्यान गुठली पर रखना, गोलू की नाक पर नहीं!",
+        "caption": "पानी सही जगह देना",
+        "setting": "mango"
+      }
+    ]
+  },
+  {
+    "id": "hi-20261101-drum-striped",
+    "title": "ढोल पर सीढ़ियाँ? #Shorts",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "ढोल के किनारे ये सफेद लकीरें क्यों हैं? क्या ये छोटी सीढ़ियाँ हैं?",
+        "caption": "ढोल पर सीढ़ियाँ?",
+        "setting": "drum"
+      },
+      {
+        "speaker": "tara",
+        "narration": "सीढ़ियाँ नहीं हैं। ये ढोल के किनारे की डोरियाँ हैं, ध्यान से देखो।",
+        "caption": "किनारे की डोरियाँ",
+        "setting": "drum"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "तुम हर चीज को कहीं चढ़ने का रास्ता समझ लेते हो, गोलू!",
+        "caption": "गोलू का नया रास्ता",
+        "setting": "drum"
+      },
+      {
+        "speaker": "golu",
+        "narration": "ठीक है! इस पर चढ़ना नहीं, इसे बजाकर गाना सुनना है। अब समझ गया।",
+        "caption": "ढोल बजाने के लिए है",
+        "setting": "drum"
+      },
+      {
+        "speaker": "tara",
+        "narration": "वाह! आज ढोल से संगीत निकलने से पहले गोलू की नई खोज निकल आई!",
+        "caption": "संगीत से पहले खोज",
+        "setting": "drum"
+      }
+    ]
   }
 ]
