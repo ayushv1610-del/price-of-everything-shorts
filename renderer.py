@@ -46,6 +46,14 @@ def frame(scene,index,total,progress):
     d.rounded_rectangle((48,1170,49+int(622*(index+progress)/total),1178),radius=3,fill=gold)
     return im
 
+def scene_frames(speech_seconds,scene_count,fps):
+    if not math.isfinite(speech_seconds) or speech_seconds<0 or scene_count<1 or fps<1:
+        raise ValueError('Invalid scene timing')
+    # Reserve a short breath after each line. Spread the minimum overall
+    # duration across the actual scene count instead of padding every line to 3s.
+    minimum=max(1.8,12./scene_count)
+    return math.ceil(max(minimum,speech_seconds+.22)*fps)
+
 def render(plan,folder):
     if plan.get('voice_engine')!='kokoro':raise ValueError('Natural character dialogue required; rejected voice fallback is disabled')
     folder=Path(folder);folder.mkdir(parents=True,exist_ok=True)
@@ -64,8 +72,8 @@ def render(plan,folder):
         wav=folder/f'voice-{i}.wav'
         from kokoro_voice import synthesize
         voice_checks.append(synthesize(s['narration'],s['speaker'],wav,language=plan.get('language','en')))
-        length=float(probe(wav)['format']['duration'])+.3
-        count=math.ceil(max(3.,length)*FPS);duration=count/FPS
+        length=float(probe(wav)['format']['duration'])
+        count=scene_frames(length,len(plan['scenes']),FPS);duration=count/FPS
         durations.append(duration)
         video=folder/f'scene-{i}.mp4'
         cmd=['ffmpeg','-v','error','-y','-threads','1','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r',str(FPS),'-i','pipe:0','-i',str(wav),'-af','apad','-t',str(duration),'-c:v','libx264','-threads','1','-preset','ultrafast','-crf','25','-pix_fmt','yuv420p','-c:a','aac','-b:a','128k',str(video)]
