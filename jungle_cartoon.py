@@ -69,6 +69,25 @@ def compose_shot(image,speaker,index,total):
   image.paste(artwork,(0,390))
  return image
 
+def smooth_progress(progress):
+ progress=max(0.,min(1.,progress))
+ return progress*progress*(3-2*progress)
+
+def kite_position(index,total,progress):
+ if index<3:return (402.,515.)
+ if index==3:
+  release=smooth_progress(progress)
+  return (402-110*release,515+180*release)
+ # One flight spans every remaining dialogue scene rather than restarting per line.
+ flight=smooth_progress((index-4+progress)/max(1,total-4))
+ return (292-52*flight,695-185*flight)
+
+def branch_bend(setting,index,progress):
+ if setting not in ('kite','ball'):return 0.
+ if index==3:return 200*smooth_progress(progress)
+ if index==4:return 200*(1-smooth_progress(progress))
+ return 0.
+
 def frame(s,i,total,p):
  t=i+p;ease=p*p*(3-2*p)
  im=Image.new('RGB',(720,1280),'#d3f2ed');d=ImageDraw.Draw(im)
@@ -77,16 +96,14 @@ def frame(s,i,total,p):
   d.ellipse((x,155,x+150,215),fill='#ffffff')
  d.ellipse((-250,610,850,1250),fill='#98d49c');d.rectangle((0,900,720,1280),fill='#f7deb3')
  # Tree stays spatially consistent: the kite and red thread are visible clues.
- bend=(ease if i==3 else 0.)*200
+ setting=s.get('setting','kite')
+ bend=branch_bend(setting,i,p)
  d.rounded_rectangle((525,410,573,920),radius=20,fill='#986441')
  d.line((548,560,385,510+bend),fill='#986441',width=26)
  for x,y,r in [(420,430,125),(570,360,138),(660,470,110)]:d.ellipse((x-r,y-r,x+r,y+r),fill='#59aa6c')
- setting=s.get('setting','kite')
  if setting=='kite':
   # The same kite is stuck in the tree until Tara frees the thread.
-  if i<3:cx,cy=402,515
-  elif i==3:cx,cy=402-110*ease,515+180*ease
-  else:cx,cy=300+110*ease,600-250*ease
+  cx,cy=kite_position(i,total,p)
   if i>=1:d.line([(190,895),(260,835),(310,700),(cx,cy+60)],fill='#e74f58',width=4)
   d.polygon([(cx,cy-61),(cx+43,cy),(cx,cy+61),(cx-43,cy)],fill='#f35a61',outline='#aa334b',width=3)
   d.line((cx,cy-61,cx,cy+61),fill='#ffe8ac',width=2)
