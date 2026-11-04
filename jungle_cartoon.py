@@ -82,6 +82,17 @@ def kite_position(index,total,progress):
  flight=smooth_progress((index-4+progress)/max(1,total-4))
  return (292-52*flight,695-185*flight)
 
+def ball_position(index, progress):
+ if index<3:return (402.,510.)
+ if index==3:
+  fall=progress**2
+  return (402-100*progress,510+390*fall)
+ if index==4:
+  # Three diminishing rebounds after impact, then the ball stays at rest.
+  bounce=abs(math.sin(3*math.pi*progress))*(1-progress)**2
+  return (302-62*smooth_progress(progress),900-105*bounce)
+ return (240.,900.)
+
 def branch_bend(setting,index,progress):
  if setting not in ('kite','ball'):return 0.
  if index==3:return 200*smooth_progress(progress)
@@ -89,7 +100,7 @@ def branch_bend(setting,index,progress):
  return 0.
 
 def frame(s,i,total,p):
- t=i+p;ease=p*p*(3-2*p)
+ t=i+p
  im=Image.new('RGB',(720,1280),'#d3f2ed');d=ImageDraw.Draw(im)
  for k in range(4):
   x=k*230-80+12*math.sin(t*.3)
@@ -119,9 +130,7 @@ def frame(s,i,total,p):
     d.ellipse((310+k*5,yy,315+k*5,yy+10),fill='#64bad6')
 
  if setting=='ball':
-  if i<3: bx,by=402,510
-  elif i==3: bx,by=402-100*ease,510+390*ease
-  else: bx,by=302+35*math.sin(p*math.pi*2),900-40*abs(math.sin(p*math.pi*2))
+  bx,by=ball_position(i,p)
   d.ellipse((bx-30,by-30,bx+30,by+30),fill='#faf5e8',outline='#343951',width=3)
   d.regular_polygon((bx,by,13),5,fill='#343951')
  if setting=='drum':

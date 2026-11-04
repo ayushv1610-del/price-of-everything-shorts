@@ -1,5 +1,5 @@
 import unittest
-from jungle_cartoon import kite_position,branch_bend
+from jungle_cartoon import kite_position,branch_bend,ball_position
 
 class MotionContinuityTests(unittest.TestCase):
  def test_release_and_every_later_scene_share_boundary_positions(self):
@@ -19,3 +19,10 @@ class MotionContinuityTests(unittest.TestCase):
    self.assertEqual(branch_bend(setting,4,1),0)
   for setting in ('rain','mango','drum'):
    for index in range(7):self.assertEqual(branch_bend(setting,index,.5),0)
+
+ def test_ball_falls_rebounds_and_stays_still(self):
+  for i in range(6):
+   a,b=ball_position(i,1),ball_position(i+1,0)
+   self.assertAlmostEqual(a[0],b[0]);self.assertAlmostEqual(a[1],b[1])
+  self.assertLess(ball_position(4,1/6)[1],ball_position(4,.5)[1])
+  self.assertEqual(ball_position(5,.5),ball_position(6,.5))
