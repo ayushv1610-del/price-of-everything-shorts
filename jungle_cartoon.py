@@ -99,6 +99,14 @@ def branch_bend(setting,index,progress):
  if index==4:return 200*(1-smooth_progress(progress))
  return 0.
 
+def attention_target(setting,index,total,progress,speaker,kind):
+ # Everyone watches the moving prop during the release and recovery beats.
+ if setting=='kite' and index>=3:return kite_position(index,total,progress)
+ if setting=='ball' and index>=3:return ball_position(index,progress)
+ positions={'golu':(150,776),'tara':(365,831),'mithu':(626,635)}
+ clue=(402,515) if setting in ('kite','ball') else (310,900)
+ return clue if index<3 and kind==speaker else positions.get(speaker)
+
 def frame(s,i,total,p):
  t=i+p
  im=Image.new('RGB',(720,1280),'#d3f2ed');d=ImageDraw.Draw(im)
@@ -146,11 +154,9 @@ def frame(s,i,total,p):
   d.line((310,610,310,795),fill='#795649',width=6)
   d.pieslice((155,505,465,715),180,360,fill='#e47c92',outline='#a84e71',width=3)
  speaker=s.get('speaker')
- positions={'golu':(150,776),'tara':(365,831),'mithu':(626,635)}
- clue=(402,515) if setting in ('kite','ball') else (310,900)
  curious='?' in s.get('narration','') or '?' in s.get('caption','')
  def attention(kind):
-  return clue if i<3 and kind==speaker else positions.get(speaker)
+  return attention_target(setting,i,total,p,speaker,kind)
  friend(d,150,820+math.sin(t*2)*4,'golu',t,speaker=='golu',1.12,trunk_raise=70*math.sin(p*math.pi) if i==3 else 0,target=attention('golu'),curious=curious)
  friend(d,365,866+math.sin(t*2+.8)*3,'tara',t+.3,speaker=='tara',.9,target=attention('tara'),curious=curious)
  # Bird on a low branch, within frame throughout the mystery.
