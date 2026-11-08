@@ -1,221 +1,5 @@
 [
   {
-    "id": "hi-green-mango-v1",
-    "title": "आम अभी क्यों नहीं तोड़ा? 🥭 #Shorts",
-    "scenes": [
-      {
-        "speaker": "mithu",
-        "narration": "मुझे आम खाना है! गोलू, वह हरा आम तोड़ दो ना।",
-        "caption": "मिट्ठू को आम चाहिए!",
-        "setting": "mango"
-      },
-      {
-        "speaker": "golu",
-        "narration": "पर वह अभी कच्चा है। थोड़ा इंतज़ार करें, तो मीठा होगा।",
-        "caption": "आम अभी कच्चा है!",
-        "setting": "mango"
-      },
-      {
-        "speaker": "tara",
-        "narration": "आज गुठली बोते हैं। फिर रोज़ थोड़ा पानी देंगे।",
-        "caption": "चलो गुठली बोएँ!",
-        "setting": "mango"
-      },
-      {
-        "speaker": "mithu",
-        "narration": "अच्छा! तो कल इस गुठली पर आम लग जाएँगे?",
-        "caption": "कल ही आम मिलेंगे?",
-        "setting": "mango"
-      },
-      {
-        "speaker": "tara",
-        "narration": "अरे नहीं! पेड़ को बड़ा होने में बहुत समय लगता है!",
-        "caption": "पेड़ को समय चाहिए!",
-        "setting": "mango"
-      }
-    ]
-  },
-  {
-    "id": "hi-kite-team-v1",
-    "title": "पतंग की डोर किसने पकड़ी? 🪁 #Shorts",
-    "scenes": [
-      {
-        "speaker": "golu",
-        "narration": "मेरी पतंग डाल में फँस गई! डोर भी हाथ से छूट रही है।",
-        "caption": "पतंग फँस गई!",
-        "setting": "kite"
-      },
-      {
-        "speaker": "tara",
-        "narration": "घबराओ मत! मैं नीचे की डोर पकड़ती हूँ। तुम ऊपर देखो।",
-        "caption": "तारा ने डोर पकड़ी!",
-        "setting": "kite"
-      },
-      {
-        "speaker": "mithu",
-        "narration": "यहाँ एक छोटी टहनी है। डोर बस उसी में उलझी है!",
-        "caption": "उलझन मिल गई!",
-        "setting": "kite"
-      },
-      {
-        "speaker": "golu",
-        "narration": "मैं डाल धीरे से झुकाता हूँ। तारा, अब डोर छुड़ा लो!",
-        "caption": "धीरे से डाल झुकाओ!",
-        "setting": "kite"
-      },
-      {
-        "speaker": "mithu",
-        "narration": "उड़ गई! पर मुझे मत बाँध देना, मैं पहले से उड़ सकता हूँ!",
-        "caption": "मिट्ठू को डोर नहीं चाहिए!",
-        "setting": "kite"
-      }
-    ]
-  },
-  {
-    "id": "hi-drum-quiet-v1",
-    "title": "ढोल की धीमी पार्टी! 🥁 #Shorts",
-    "scenes": [
-      {
-        "speaker": "tara",
-        "narration": "आज जंगल में संगीत की पार्टी है! गोलू, ढोल तुम बजाओ।",
-        "caption": "संगीत की पार्टी!",
-        "setting": "drum"
-      },
-      {
-        "speaker": "golu",
-        "narration": "मैं बजाऊँगा! पर मेरी सूँड़ से बहुत तेज़ आवाज़ आएगी।",
-        "caption": "ढोल बहुत तेज़ बजेगा?",
-        "setting": "drum"
-      },
-      {
-        "speaker": "mithu",
-        "narration": "तो धीरे बजाओ। मैं अपनी चोंच से छोटी ताल दूँगा!",
-        "caption": "छोटी सी ताल!",
-        "setting": "drum"
-      },
-      {
-        "speaker": "tara",
-        "narration": "सुनो! जब सब धीरे बजाते हैं, तो हर दोस्त सुनाई देता है।",
-        "caption": "सबकी धुन सुनो!",
-        "setting": "drum"
-      },
-      {
-        "speaker": "golu",
-        "narration": "वाह! अब मेरा पेट भी ताल दे रहा है। खाने की पार्टी कब है?",
-        "caption": "पेट भी ढोल बजाएगा!",
-        "setting": "drum"
-      }
-    ]
-  },
-  {
-    "id": "hi-puddle-splash-v1",
-    "title": "बारिश की छींटे वाली हँसी! ☔ #Shorts",
-    "scenes": [
-      {
-        "speaker": "mithu",
-        "narration": "बारिश रुक गई! चलो अब घर चलें, छाता बंद कर दो।",
-        "caption": "बारिश रुक गई!",
-        "setting": "rain"
-      },
-      {
-        "speaker": "tara",
-        "narration": "रुको! गोलू, सामने पानी भरा है। धीरे कदम रखना!",
-        "caption": "आगे पानी है!",
-        "setting": "rain"
-      },
-      {
-        "speaker": "golu",
-        "narration": "मैं बहुत धीरे चलूँगा। बस यह एक छोटा सा कदम है!",
-        "caption": "बस एक छोटा कदम!",
-        "setting": "rain"
-      },
-      {
-        "speaker": "mithu",
-        "narration": "अरे! तुम्हारे छोटे कदम से तो मेरे पंख भी भीग गए!",
-        "caption": "मिट्ठू भीग गया!",
-        "setting": "rain"
-      },
-      {
-        "speaker": "tara",
-        "narration": "छाता फिर खोलो! अब बारिश आसमान से नहीं, गोलू से आएगी!",
-        "caption": "गोलू वाली बारिश!",
-        "setting": "rain"
-      }
-    ]
-  },
-  {
-    "id": "hi-20261030-rain-rhythm",
-    "title": "बारिश में किसकी ताल? ☔ #Shorts",
-    "scenes": [
-      {
-        "speaker": "tara",
-        "narration": "सुनो! छाते पर कोई ढोल बजा रहा है क्या?",
-        "caption": "छाते पर ढोल?",
-        "setting": "rain"
-      },
-      {
-        "speaker": "golu",
-        "narration": "ऊपर कोई नहीं है। बस बारिश की बूँदें हैं!",
-        "caption": "बूँदों की आवाज़",
-        "setting": "rain"
-      },
-      {
-        "speaker": "mithu",
-        "narration": "छोटी बूँद टिक करती है, बड़ी बूँद टप करती है!",
-        "caption": "टिक या टप?",
-        "setting": "rain"
-      },
-      {
-        "speaker": "tara",
-        "narration": "तो हम बिना ढोल के भी बारिश वाला गाना गा सकते हैं!",
-        "caption": "बारिश का गाना",
-        "setting": "rain"
-      },
-      {
-        "speaker": "golu",
-        "narration": "टिक टप, टिक टप! अरे, मेरी सूँड़ पर भी एक टप!",
-        "caption": "सूँड़ पर टप!",
-        "setting": "rain"
-      }
-    ]
-  },
-  {
-    "id": "hi-20261030-drum-turns",
-    "title": "मिट्ठू का अधूरा गाना! 🥁 #Shorts",
-    "scenes": [
-      {
-        "speaker": "mithu",
-        "narration": "मेरा गाना हर बार बीच में गायब क्यों हो जाता है?",
-        "caption": "गाना कहाँ गया?",
-        "setting": "drum"
-      },
-      {
-        "speaker": "tara",
-        "narration": "गोलू, तुम साथ में ढोल बजाते हो, तो मिट्ठू सुनाई नहीं देता!",
-        "caption": "ढोल ज़्यादा तेज़!",
-        "setting": "drum"
-      },
-      {
-        "speaker": "golu",
-        "narration": "अच्छा! पहले मिट्ठू गाएगा, फिर मैं ताल बजाऊँगा।",
-        "caption": "बारी बारी संगीत",
-        "setting": "drum"
-      },
-      {
-        "speaker": "mithu",
-        "narration": "ला ला ला! अब तुम्हारी बारी, गोलू!",
-        "caption": "अब गोलू की बारी",
-        "setting": "drum"
-      },
-      {
-        "speaker": "tara",
-        "narration": "वाह! दोनों का गाना सुन लिया। अब मेरी ताली की बारी!",
-        "caption": "सबकी अपनी बारी",
-        "setting": "drum"
-      }
-    ]
-  },
-  {
     "id": "hi-20261030-mango-truth",
     "title": "आम का छोटा सा राज़! 🥭 #Shorts",
     "scenes": [
@@ -2156,6 +1940,222 @@
         "narration": "छोटे उछाल देखो। गेंद भी आराम कर रही है। गोलू, अब माफी वाला भाषण आराम करे!",
         "caption": "भाषण को भी आराम",
         "setting": "ball"
+      }
+    ]
+  },
+  {
+    "id": "hi-2026-11-08-wrong-invitation",
+    "title": "ढोल को किसने बुलाया",
+    "scenes": [
+      {
+        "speaker": "tara",
+        "narration": "मिट्ठू ने दोस्तों को बुलाया था। गोलू ढोल का नाम लेकर जवाब क्यों दे रहा है?",
+        "caption": "ढोल का जवाब कौन दे?",
+        "setting": "drum"
+      },
+      {
+        "speaker": "golu",
+        "narration": "उसने कहा, ढोल वाले आओ। सामने नारंगी ढोल है और मैं उसके पास हूँ!",
+        "caption": "ढोल के पास गोलू",
+        "setting": "drum"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "अरे, मैं तुम्हारा नाम भूलकर तुम्हारे काम से बुला रहा था। बुरा लगा क्या?",
+        "caption": "नाम भूल गया",
+        "setting": "drum"
+      },
+      {
+        "speaker": "golu",
+        "narration": "थोड़ा! मैं ढोल के बिना भी तुम्हारा दोस्त हूँ। गोलू कहो, मैं सुन लूँगा।",
+        "caption": "नाम से बुलाओ",
+        "setting": "drum"
+      },
+      {
+        "speaker": "tara",
+        "narration": "गोलू, प्यारे दोस्त! अब ठीक? देखो, ढोल को बुलाया ही नहीं, फिर भी यहीं बैठा है!",
+        "caption": "दोस्त का प्यारा नाम",
+        "setting": "drum"
+      }
+    ]
+  },
+  {
+    "id": "hi-2026-11-08-puddle-permission",
+    "title": "पानी को छुट्टी मिली",
+    "scenes": [
+      {
+        "speaker": "mithu",
+        "narration": "अरे, तारा बारिश से छाता बचाना चाहती है? फिर यह गुलाबी छाता किस काम का?",
+        "caption": "छाते को क्यों बचाएँ?",
+        "setting": "rain"
+      },
+      {
+        "speaker": "tara",
+        "narration": "मुझे लगा, ऊपर बूँदें पड़ेंगी तो छाता भी भीग जाएगा। उसका क्या होगा?",
+        "caption": "ऊपर पड़ती बूँदें",
+        "setting": "rain"
+      },
+      {
+        "speaker": "golu",
+        "narration": "इसे बारिश के लिए ही बनाया गया है। इस्तेमाल के बाद खुला रखकर सुखा सकते हैं।",
+        "caption": "बाद में सुखाएँगे",
+        "setting": "rain"
+      },
+      {
+        "speaker": "tara",
+        "narration": "अच्छा! चीज की देखभाल करना मतलब उसे हमेशा छिपाकर रखना नहीं है।",
+        "caption": "देखभाल करके इस्तेमाल",
+        "setting": "rain"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "बारिश थम गई। छाते ने अपना काम किया, और हमने उसे काम करने दिया!",
+        "caption": "छाते का काम पूरा",
+        "setting": "rain"
+      }
+    ]
+  },
+  {
+    "id": "hi-2026-11-08-empty-sky-plan",
+    "title": "खाली आसमान की जगह",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "ऊपर इतनी जगह खाली है, फिर मेरी लाल पतंग ने यही डाल क्यों चुनी?",
+        "caption": "इतना खाली आसमान",
+        "setting": "kite"
+      },
+      {
+        "speaker": "tara",
+        "narration": "उसने जगह चुनी नहीं। डोर यहाँ उलझी है। खाली जगह होना ही काफी नहीं।",
+        "caption": "उलझी हुई डोर",
+        "setting": "kite"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "अब समझे? जाना चाहें वहाँ, पर पहले बीच की अड़चन देखनी पड़ेगी।",
+        "caption": "बीच की अड़चन देखो",
+        "setting": "kite"
+      },
+      {
+        "speaker": "golu",
+        "narration": "हाँ! डाल नीचे हुई और डोर छूट रही है। अब खुली जगह काम आएगी।",
+        "caption": "डोर छूटने लगी",
+        "setting": "kite"
+      },
+      {
+        "speaker": "tara",
+        "narration": "लो, उड़ गई! आसमान को जगह बढ़ाने की जरूरत नहीं पड़ी। हमें उलझन समझनी थी!",
+        "caption": "उलझन खुली पतंग उड़ी",
+        "setting": "kite"
+      }
+    ]
+  },
+  {
+    "id": "hi-2026-11-08-sweet-memory",
+    "title": "मीठी याद की रखवाली",
+    "scenes": [
+      {
+        "speaker": "golu",
+        "narration": "आम खत्म हुआ, फिर मिट्ठू अभी भी इतना खुश क्यों है? यहाँ बस गुठली बची है!",
+        "caption": "आम खत्म खुशी बाकी",
+        "setting": "mango"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "उसका स्वाद याद है! मेरी चोंच पर पीला रस भी थोड़ा रह गया है।",
+        "caption": "पीले रस की याद",
+        "setting": "mango"
+      },
+      {
+        "speaker": "tara",
+        "narration": "तो अच्छी चीज खत्म होने पर भी उसकी याद रह सकती है। गुठली भी देखो।",
+        "caption": "याद और गुठली",
+        "setting": "mango"
+      },
+      {
+        "speaker": "golu",
+        "narration": "इसे बोकर थोड़ा पानी देते हैं। याद सँभालने के साथ नया काम भी हो जाएगा।",
+        "caption": "याद से नया काम",
+        "setting": "mango"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "मीठी याद मेरी, देखभाल हमारी! बस गोलू, याद बाँटते समय मेरी चोंच मत गिन लेना!",
+        "caption": "देखभाल सबकी",
+        "setting": "mango"
+      }
+    ]
+  },
+  {
+    "id": "hi-2026-11-08-unfinished-choice",
+    "title": "खेल का अजीब चुनाव",
+    "scenes": [
+      {
+        "speaker": "tara",
+        "narration": "हमारी गेंद डाल पर है, फिर गोलू पूछ रहा है कि कौन सी टीम जीती?",
+        "caption": "टीम कब जीती?",
+        "setting": "ball"
+      },
+      {
+        "speaker": "golu",
+        "narration": "मैं खेल शुरू होने से पहले विजेता तय कर दूँ, तो बाद में झगड़ा नहीं होगा!",
+        "caption": "पहले ही विजेता तय?",
+        "setting": "ball"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "सफेद गेंद अभी ऊपर अटकी है। खेला ही नहीं, तो जीत कैसी? पहले मजा लें।",
+        "caption": "पहले खेल तो लें",
+        "setting": "ball"
+      },
+      {
+        "speaker": "tara",
+        "narration": "अब गेंद नीचे आ रही है। आज हम बारी बाँटेंगे और साथ खेलेंगे।",
+        "caption": "साथ खेलेंगे",
+        "setting": "ball"
+      },
+      {
+        "speaker": "golu",
+        "narration": "छोटे उछाल देखो! ठीक है, जीत का फैसला बाद में। अभी तीन दोस्तों का खेल जीता!",
+        "caption": "दोस्तों का खेल जीता",
+        "setting": "ball"
+      }
+    ]
+  },
+  {
+    "id": "hi-2026-11-08-name-of-tune",
+    "title": "बिना नाम वाला गाना",
+    "scenes": [
+      {
+        "speaker": "mithu",
+        "narration": "मैंने नया गाना बनाया, पर नाम नहीं मिला। क्या बिना नाम के गाना खो जाएगा?",
+        "caption": "गाने का नाम कहाँ?",
+        "setting": "drum"
+      },
+      {
+        "speaker": "golu",
+        "narration": "सामने ढोल की डोरियाँ दिख रही हैं। उसका नाम रख दो, डोरी वाला गाना!",
+        "caption": "डोरी वाला गाना?",
+        "setting": "drum"
+      },
+      {
+        "speaker": "tara",
+        "narration": "नाम बाद में भी रख सकते हैं। पहले सुनाएँ तो पता चले कि गाना कैसा है।",
+        "caption": "पहले सुन तो लें",
+        "setting": "drum"
+      },
+      {
+        "speaker": "mithu",
+        "narration": "तीन दोस्त, प्यारी बातें, साथ बिताएँ हँसती रातें! छोटा सा यही गाना है।",
+        "caption": "तीन दोस्तों का गाना",
+        "setting": "drum"
+      },
+      {
+        "speaker": "golu",
+        "narration": "तो नाम मिला, हमारी बातें! अच्छा हुआ डोरी नहीं रखा, वरना गाना उलझ जाता!",
+        "caption": "हमारी बातें",
+        "setting": "drum"
       }
     ]
   }
